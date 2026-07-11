@@ -1,110 +1,91 @@
-import { useState } from "react";
-import api from "./services/api";
+import {BrowserRouter,Routes,Route,Navigate} from "react-router-dom";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import History from "./pages/History";
+import Watchlist from "./pages/Watchlist";
+import { useAuth } from "./context/AuthContext";
+import Dashboard from "./pages/Dashboard";
+
+function ProtectedRoute({ children }) {
+
+    const { isAuthenticated } = useAuth();
+
+    return isAuthenticated
+
+        ? children
+
+        : <Navigate to="/login" replace/>;
+
+}
 
 function App() {
 
-    const [company, setCompany] = useState("");
-    const [result, setResult] = useState(null);
-
-    const handleAnalyze = async () => {
-
-        if (!company.trim()) return;
-
-        try {
-
-            const response = await api.post("/analyze", {
-                company
-            });
-
-            setResult(response.data);
-
-        } catch (err) {
-
-            console.log(err);
-
-        }
-
-    };
-
     return (
 
-        <div className="min-h-screen bg-slate-100 flex items-center justify-center">
+        <BrowserRouter>
 
-            <div className="bg-white p-10 rounded-xl shadow-lg w-[500px]">
+            <Routes>
 
-                <h1 className="text-3xl font-bold mb-6 text-center">
+                <Route
 
-                    AI Investment Research Agent
+                    path="/"
 
-                </h1>
+                    element={
 
-                <input
+                        <ProtectedRoute>
 
-                    type="text"
+                            <Home />
 
-                    placeholder="Enter Company Name"
+                        </ProtectedRoute>
 
-                    className="w-full border p-3 rounded"
-
-                    value={company}
-
-                    onChange={(e) => setCompany(e.target.value)}
+                    }
 
                 />
 
-                <button
+                <Route
 
-                    onClick={handleAnalyze}
+                    path="/login"
 
-                    className="w-full bg-blue-600 text-white mt-4 py-3 rounded"
+                    element={<Login />}
 
-                >
+                />
 
-                    Analyze
+                <Route
 
-                </button>
+                    path="/register"
 
-                {result && (
+                    element={<Register />}
 
-<div className="mt-6 rounded-lg border bg-white p-4">
+                />
+                <Route
+    path="/history"
+    element={
+        <ProtectedRoute>
+            <History />
+        </ProtectedRoute>
+    }
+/>
 
-<h2 className="text-2xl font-bold">
+<Route
+    path="/watchlist"
+    element={
+        <ProtectedRoute>
+            <Watchlist />
+        </ProtectedRoute>
+    }
+/>
+<Route
 
-{result.data.company}
+    path="/dashboard"
 
-</h2>
+    element={<Dashboard />}
 
-<p className="mt-2">
+/>
 
-<b>Recommendation:</b> {result.data.recommendation}
+            </Routes>
 
-</p>
-
-<p>
-
-<b>Investment Score:</b> {result.data.score}
-
-</p>
-
-<p>
-
-<b>Confidence:</b> {result.data.confidence}%
-
-</p>
-
-<p className="mt-3">
-
-{result.data.summary}
-
-</p>
-
-</div>
-
-)}
-
-            </div>
-
-        </div>
+        </BrowserRouter>
 
     );
 

@@ -5,8 +5,11 @@ const { analyzeCompany } = require("../controllers/analysisController");
 
 const validateCompany = require("../middlewares/validateCompany");
 
+const authMiddleware = require("../middlewares/authMiddleware");
+
 router.post(
     "/",
+    authMiddleware,
     validateCompany,
     analyzeCompany
 );

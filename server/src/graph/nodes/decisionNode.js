@@ -2,7 +2,9 @@ const { makeInvestmentDecision } = require("../../agents/decisionAgent");
 
 const decisionNode = async (state) => {
 
-    const decision = await makeInvestmentDecision(
+    console.log("🤖 Decision Node");
+
+    const analysis = await makeInvestmentDecision(
 
         state.profile,
 
@@ -14,10 +16,16 @@ const decisionNode = async (state) => {
 
     return {
 
-        decision
+        ...state,
+
+        analysis
 
     };
 
 };
 
-module.exports = decisionNode;
+module.exports = {
+
+    decisionNode
+
+};

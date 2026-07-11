@@ -1,67 +1,38 @@
-const { searchCompany } = require("../tools/searchTool");
-const { getCompanyProfile } = require("../tools/companyTool");
-const { getQuote } = require("../tools/financialTool");
-const { getCompanyNews } = require("../tools/newsTool");
-const { makeInvestmentDecision } = require("../agents/decisionAgent");
+const { StateGraph, START, END } = require("@langchain/langgraph");
 
-const runInvestmentWorkflow = async (company) => {
+const { GraphState } = require("./state");
 
-    try {
-
-        // Search Company
-        console.time("🔍 Search Company");
-
-        const stock = await searchCompany(company);
-
-        console.timeEnd("🔍 Search Company");
-
-        console.log("✅ Symbol:", stock.symbol);
+const { searchNode } = require("./nodes/searchNode");
+const { profileNode } = require("./nodes/profileNode");
+const { financialNode } = require("./nodes/financialNode");
+const { newsNode } = require("./nodes/newsNode");
+const { decisionNode } = require("./nodes/decisionNode");
 
 
-        // Profile & Quote in Parallel
-        console.time("📊 Profile + Quote");
+const investmentGraph = new StateGraph(GraphState)
 
-        const [profile, quote] = await Promise.all([
-            getCompanyProfile(stock.symbol),
-            getQuote(stock.symbol)
-        ]);
+    .addNode("searchCompany", searchNode)
 
-        console.timeEnd("📊 Profile + Quote");
+    .addNode("fetchProfile", profileNode)
 
+    .addNode("fetchFinancial", financialNode)
 
-        // Company News
-        console.time("📰 Company News");
+    .addNode("fetchNews", newsNode)
 
-        const news = await getCompanyNews(stock.symbol);
+    .addNode("makeDecision", decisionNode)
 
-        console.timeEnd("📰 Company News");
+    .addEdge(START, "searchCompany")
 
+    .addEdge("searchCompany", "fetchProfile")
 
-        // AI Analysis
-        console.time("🤖 Gemini Analysis");
+    .addEdge("fetchProfile", "fetchFinancial")
 
-        const decision = await makeInvestmentDecision(
-            profile,
-            quote,
-            news
-        );
+    .addEdge("fetchFinancial", "fetchNews")
 
-        console.timeEnd("🤖 Gemini Analysis");
+    .addEdge("fetchNews", "makeDecision")
 
-        return decision;
+    .addEdge("makeDecision", END)
 
-    } catch (error) {
+    .compile();
 
-        console.error("❌ Investment Workflow Error");
-
-        console.error(error);
-
-        throw error;
-
-    }
-
-};
-
-module.exports = {
-    runInvestmentWorkflow
-};
+module.exports = investmentGraph;

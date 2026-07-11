@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+:root{
+    font-family: Inter, sans-serif;
+}
+
+body{
+
+    margin:0;
+
+    background:#020617;
+
+    color:#F8FAFC;
+
+    min-height:100vh;
+
+}
+
+*{
+
+box-sizing:border-box;
+
+}
+
+button{
+
+cursor:pointer;
+
+}

@@ -21,6 +21,7 @@ const getCompanyProfile = async (symbol) => {
     const profile = {
         name: data.name,
         ticker: data.ticker,
+        logo: data.logo,
         industry: data.finnhubIndustry,
         country: data.country,
         currency: data.currency,

@@ -52,16 +52,27 @@ PASS
 Return ONLY valid JSON.
 
 {
-    "company":"",
-    "summary":"",
-    "recommendation":"",
-    "score":0,
-    "confidence":0,
-    "pros":[],
-    "cons":[],
-    "risks":[],
-    "futureOutlook":"",
-    "reasoning":""
+  "company": "",
+  "summary": "",
+  "recommendation": "",
+  "score": 0,
+  "confidence": 0,
+
+  "riskLevel": "",
+
+  "investmentHorizon": "",
+
+  "investorType": "",
+
+  "sectorOutlook": "",
+
+  "volatility": "",
+
+  "pros": [],
+  "cons": [],
+  "risks": [],
+  "futureOutlook": "",
+  "reasoning": ""
 }
 `;
 

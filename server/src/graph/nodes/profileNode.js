@@ -2,9 +2,13 @@ const { getCompanyProfile } = require("../../tools/companyTool");
 
 const profileNode = async (state) => {
 
+    console.log("🏢 Profile Node");
+
     const profile = await getCompanyProfile(state.symbol);
 
     return {
+
+        ...state,
 
         profile
 
@@ -12,4 +16,4 @@ const profileNode = async (state) => {
 
 };
 
-module.exports = profileNode;
+module.exports = { profileNode };
