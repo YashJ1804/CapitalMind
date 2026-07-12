@@ -1,4 +1,22 @@
 # 📈 CapitalMind
+![React](https://img.shields.io/badge/React-19-blue?logo=react)
+![Node](https://img.shields.io/badge/Node.js-22-green?logo=node.js)
+![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-success?logo=mongodb)
+![Gemini](https://img.shields.io/badge/AI-Gemini-purple)
+![License](https://img.shields.io/badge/License-MIT-yellow)
+
+
+
+## 🌐 Live Demo
+
+Frontend:
+https:https://capital-mind-eta.vercel.app/
+
+Backend API:
+https:https://capitalmind-backend.onrender.com
+
+GitHub:
+https://github.com/YashJ1804/CapitalMind
 
 > **AI-Powered Investment Intelligence Platform**
 
@@ -7,6 +25,21 @@ CapitalMind is an AI-driven stock analysis platform that combines **LangGraph wo
 The platform analyzes company fundamentals, market performance, recent news, and risk factors to provide actionable insights for investors.
 
 ---
+
+## Why CapitalMind?
+
+Traditional stock screeners provide raw financial data but often require significant manual interpretation.
+
+CapitalMind combines:
+
+- Live market data
+- AI reasoning
+- News analysis
+- Company fundamentals
+
+to generate explainable investment recommendations in a single workflow.
+
+The goal is not to predict the market but to help investors make more informed decisions using AI-assisted analysis.
 
 ## ✨ Features
 
@@ -45,6 +78,52 @@ The platform analyzes company fundamentals, market performance, recent news, and
 - Responsive Dashboard
 
 ---
+## Example Analysis
+
+Company:
+Apple
+
+Recommendation:
+BUY
+
+Investment Score:
+92/100
+
+Confidence:
+94%
+
+Key Strengths:
+- Strong financial position
+- AI ecosystem leadership
+- Consistent revenue growth
+
+Key Risks:
+- High valuation
+- Regulatory pressure
+
+Investment Horizon:
+Long Term
+
+## Key Design Decisions
+
+• Used LangGraph to organize the AI workflow into modular nodes.
+
+• Selected Gemini AI because of its strong reasoning capabilities and developer-friendly API.
+
+• Used Finnhub for reliable financial and market data.
+
+• Cached analysis results in MongoDB to reduce repeated API calls.
+
+## Trade-offs
+
+• Limited to publicly traded companies supported by Finnhub.
+
+• AI recommendations depend on the quality and freshness of external data.
+
+• Real-time streaming updates were not implemented to keep the architecture simpler and within project scope.
+
+
+
 
 # 🏗 Architecture
 
@@ -287,6 +366,22 @@ VITE_API_URL=http://localhost:5000/api
 - Analysis History
 
 ---
+
+# 🚀 Future Improvements
+
+If given additional development time, I would extend CapitalMind with the following features:
+
+- 🇮🇳 Indian Stock Market Support (NSE/BSE)
+- 📊 Portfolio Tracking & Performance Analytics
+- 🤖 Conversational AI Investment Assistant
+- 🔐 Google OAuth Authentication
+- 🔔 Real-time Price Alerts & Notifications
+- 🐳 Docker Containerization
+- ☁️ CI/CD Pipeline for Automated Deployment
+- 📄 PDF Investment Report Export
+- 📱 Progressive Web App (PWA) Support
+
+A more detailed roadmap is available in:
 
 # 🚀 Future Roadmap
 
