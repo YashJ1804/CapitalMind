@@ -15,13 +15,9 @@ const getChartData = async (symbol) => {
             params: {
 
                 symbol,
-
                 resolution: "D",
-
                 from,
-
                 to,
-
                 token: process.env.FINNHUB_API_KEY
 
             }

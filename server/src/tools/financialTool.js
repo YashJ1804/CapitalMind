@@ -1,31 +1,36 @@
-const httpClient = require("../services/httpClient");
+const axios = require("axios");
 
-const getQuote = async(symbol)=>{
+const getQuote = async (symbol) => {
 
-    const url=`https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${process.env.FINNHUB_API_KEY}`;
+    const { data } = await axios.get(
 
-    const { data } = await httpClient.get(url);
+        "https://finnhub.io/api/v1/quote",
 
-    return{
+        {
+            params: {
+                symbol,
+                token: process.env.FINNHUB_API_KEY
+            }
+        }
 
-        currentPrice:data.c,
+    );
 
-        high:data.h,
+    return {
 
-        low:data.l,
-
-        open:data.o,
-
-        previousClose:data.pc,
-
-        change:data.d,
-
-        percentChange:data.dp
+        currentPrice: data.c,
+        high: data.h,
+        low: data.l,
+        open: data.o,
+        previousClose: data.pc,
+        change: data.d,
+        percentChange: data.dp
 
     };
 
-}
+};
 
-module.exports={
+module.exports = {
+
     getQuote
-}
+
+};

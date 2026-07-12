@@ -16,14 +16,13 @@ function Reasoning({ reasoning }) {
 
                     <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">
 
-                        AI Reasoning
+                        CapitalMind Reasoning
 
                     </h2>
 
                     <p className="text-slate-400 text-sm mt-1">
 
-                        Why the AI reached this investment decision
-
+                       Why CapitalMind generated this recommendation
                     </p>
 
                 </div>

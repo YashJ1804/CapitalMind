@@ -8,12 +8,15 @@ const authRoutes = require("./routes/authRoutes");
 const historyRoutes = require("./routes/historyRoutes");
 const watchlistRoutes = require("./routes/watchlistRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
+const marketRoutes=require("./routes/marketRoutes");
+
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use("/api/history", historyRoutes);
+app.use("/api/market", marketRoutes);
 app.use(
 
     "/api/dashboard",

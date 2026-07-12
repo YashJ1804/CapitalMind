@@ -6,11 +6,12 @@ const { searchNode } = require("./nodes/searchNode");
 const { profileNode } = require("./nodes/profileNode");
 const { financialNode } = require("./nodes/financialNode");
 const { newsNode } = require("./nodes/newsNode");
+const { riskNode } = require("./nodes/riskNode");
 const { decisionNode } = require("./nodes/decisionNode");
-
 
 const investmentGraph = new StateGraph(GraphState)
 
+    // Nodes
     .addNode("searchCompany", searchNode)
 
     .addNode("fetchProfile", profileNode)
@@ -19,17 +20,29 @@ const investmentGraph = new StateGraph(GraphState)
 
     .addNode("fetchNews", newsNode)
 
+    .addNode("riskAnalysis", riskNode)
+
     .addNode("makeDecision", decisionNode)
 
+    // Start
     .addEdge(START, "searchCompany")
 
+    // Parallel Execution (Fan-out)
     .addEdge("searchCompany", "fetchProfile")
 
-    .addEdge("fetchProfile", "fetchFinancial")
+    .addEdge("searchCompany", "fetchFinancial")
 
-    .addEdge("fetchFinancial", "fetchNews")
+    .addEdge("searchCompany", "fetchNews")
 
-    .addEdge("fetchNews", "makeDecision")
+    // Wait for all three branches (Fan-in)
+    .addEdge("fetchProfile", "riskAnalysis")
+
+    .addEdge("fetchFinancial", "riskAnalysis")
+
+    .addEdge("fetchNews", "riskAnalysis")
+
+    // Continue
+    .addEdge("riskAnalysis", "makeDecision")
 
     .addEdge("makeDecision", END)
 

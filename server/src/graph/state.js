@@ -14,6 +14,8 @@ const GraphState = Annotation.Root({
 
     news: Annotation(),
 
+    risk: Annotation(),
+
     analysis: Annotation()
 
 

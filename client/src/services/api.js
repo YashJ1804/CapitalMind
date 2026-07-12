@@ -1,8 +1,11 @@
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const api = axios.create({
 
-    baseURL: "http://localhost:5000/api"
+    baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
+
+    timeout: 30000
 
 });
 
@@ -32,12 +35,47 @@ api.interceptors.response.use(
 
     (error) => {
 
-        if (error.response?.status === 401) {
+        const status = error.response?.status;
 
-            localStorage.removeItem("token");
-            localStorage.removeItem("user");
+        const message =
+            error.response?.data?.message ||
+            "Something went wrong.";
 
-            window.location.href = "/login";
+        switch (status) {
+
+            case 400:
+
+                toast.error(message);
+                break;
+
+            case 401:
+
+                localStorage.removeItem("token");
+                localStorage.removeItem("user");
+
+                toast.error("Session expired. Please login again.");
+
+                window.location.href = "/login";
+                break;
+
+            case 403:
+
+                toast.error("You are not authorized.");
+                break;
+
+            case 404:
+
+                toast.error(message);
+                break;
+
+            case 500:
+
+                toast.error("Internal server error.");
+                break;
+
+            default:
+
+                toast.error(message);
 
         }
 
