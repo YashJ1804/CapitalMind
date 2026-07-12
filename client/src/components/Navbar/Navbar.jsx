@@ -1,12 +1,24 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import ChangePasswordModal from "../ChangePasswordModal/ChangePasswordModal";
-import { FaBars, FaTimes } from "react-icons/fa";
+import {
+    FaBars,
+    FaTimes,
+    FaHome,
+    FaChartLine,
+    FaHistory,
+    FaStar,
+    FaUserCircle,
+    FaSignOutAlt,
+    FaLock,
+    FaSignInAlt,
+    FaUserPlus
+} from "react-icons/fa";
 
 function Navbar() {
 
-    const { user, logout } = useAuth();
+    const { user, logout, isAuthenticated } = useAuth();
 
     const navigate = useNavigate();
 
@@ -18,389 +30,754 @@ function Navbar() {
 
         logout();
 
-        navigate("/login");
+        setOpen(false);
+
+        setMobileMenu(false);
+
+        navigate("/");
 
     };
 
+    const navLink =
+        "px-4 py-2 rounded-xl text-slate-300 hover:text-cyan-400 hover:bg-slate-800 transition-all duration-300 font-medium";
+
+    const activeNav =
+        "px-4 py-2 rounded-xl bg-blue-600/20 text-cyan-400 font-semibold";
+
     return (
 
-        <nav
-className="
+        <nav className="
 fixed
 top-0
 left-0
 w-full
 z-50
-bg-slate-950/80
+bg-slate-950/95
 backdrop-blur-xl
 border-b
 border-slate-800
 shadow-2xl
-transition-all
-duration-300
 ">
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-wrap justify-between items-center gap-4">
+            <div className="max-w-7xl mx-auto px-5 lg:px-8 py-4 flex items-center justify-between">
 
                 {/* Logo */}
 
                 <Link
-    to="/"
-    className="flex items-center gap-3 group"
->
-    <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center shadow-lg group-hover:scale-110 transition">
-        📈
-    </div>
+                    to="/"
+                    className="flex items-center gap-3 group"
+                >
 
-    <div>
-        <h1 className="text-2xl lg:text-3xl font-black tracking-tight text-white">
-            CapitalMind
-        </h1>
-
-        <p className="text-xs text-slate-400 -mt-1">
-            AI Investment Intelligence
-        </p>
-    </div>
-</Link>
-
-                {/* Navigation */}
-
-                <>
-    {/* Desktop Navigation */}
-
-    <div className="hidden lg:flex items-center gap-8">
-
-        <Link
-            to="/"
-            className="
-px-4
-py-2
+                    <div className="
+w-11
+h-11
 rounded-xl
-text-slate-300
-hover:bg-slate-800
-hover:text-blue-400
-transition-all
-duration-300
-font-medium
-"
-        >
-            Home
-        </Link>
-
-        <Link
-            to="/dashboard"
-            className="
-px-4
-py-2
-rounded-xl
-text-slate-300
-hover:bg-slate-800
-hover:text-blue-400
-transition-all
-duration-300
-font-medium
-"
-        >
-            Dashboard
-        </Link>
-
-        <Link
-            to="/history"
-            className="
-px-4
-py-2
-rounded-xl
-text-slate-300
-hover:bg-slate-800
-hover:text-blue-400
-transition-all
-duration-300
-font-medium
-"
-        >
-            History
-        </Link>
-
-        <Link
-            to="/watchlist"
-            className="
-px-4
-py-2
-rounded-xl
-text-slate-300
-hover:bg-slate-800
-hover:text-blue-400
-transition-all
-duration-300
-font-medium
-"
-        >
-            Watchlist
-        </Link>
-
-        {/* User Dropdown */}
-
-        <div className="relative">
-
-            <button
-
-                onClick={() => setOpen(!open)}
-
-                className="
+bg-gradient-to-br
+from-blue-600
+to-cyan-400
 flex
 items-center
-gap-2
-px-5
-py-2.5
-rounded-full
-bg-slate-800
-border
-border-slate-700
-hover:border-blue-500
-hover:bg-slate-700
-transition-all
-duration-300
+justify-center
 shadow-lg
-"
-
-            >
-
-                👤 {user?.name}
-
-            </button>
-
-            {open && (
-
-                <div className="
-absolute
-right-0
-mt-4
-w-72
-rounded-2xl
-bg-slate-900/95
-backdrop-blur-xl
-border
-border-slate-700
-shadow-2xl
-overflow-hidden
-animate-fadeIn
+group-hover:scale-110
+transition
+duration-300
 ">
 
-                    <div className="p-4 border-b border-slate-700">
+                        📈
 
-                        <p className="font-semibold">
+                    </div>
 
-                            {user?.name}
+                    <div>
 
-                        </p>
+                        <h1 className="text-2xl font-black text-white tracking-tight">
 
-                        <p className="text-sm text-slate-400">
+                            CapitalMind
 
-                            {user?.email}
+                        </h1>
+
+                        <p className="text-xs text-slate-400">
+
+                            AI Investment Intelligence
 
                         </p>
 
                     </div>
 
-                    <Link
+                </Link>
 
-                        to="/watchlist"
+                {/* Desktop */}
 
-                        className="block px-4 py-3 hover:bg-slate-800
-hover:text-blue-400
-transition"
+                <div className="hidden lg:flex items-center gap-3">
 
+                    <NavLink
+                        to="/"
+                        className={({ isActive }) =>
+                            isActive ? activeNav : navLink
+                        }
                     >
+                        Home
+                    </NavLink>
 
-                        ⭐ Watchlist
+                    {isAuthenticated && (
 
-                    </Link>
+                        <>
 
-                    <Link
+                            <NavLink
+                                to="/dashboard"
+                                className={({ isActive }) =>
+                                    isActive ? activeNav : navLink
+                                }
+                            >
+                                Dashboard
+                            </NavLink>
 
-                        to="/history"
+                            <NavLink
+                                to="/history"
+                                className={({ isActive }) =>
+                                    isActive ? activeNav : navLink
+                                }
+                            >
+                                History
+                            </NavLink>
 
-                        className="block px-4 py-3 hover:bg-slate-800"
+                            <NavLink
+                                to="/watchlist"
+                                className={({ isActive }) =>
+                                    isActive ? activeNav : navLink
+                                }
+                            >
+                                Watchlist
+                            </NavLink>
 
-                    >
+                        </>
 
-                        📜 History
+                    )}
 
-                    </Link>
+                    {!isAuthenticated ? (
 
-                    <button
+                        <div className="flex items-center gap-3 ml-6">
 
-                        onClick={() => {
+                            <Link
+                                to="/login"
+                                className="
+px-5
+py-2.5
+rounded-xl
+border
+border-slate-700
+text-white
+hover:border-cyan-400
+transition
+"
+                            >
 
-                            setShowPasswordModal(true);
+                                Login
 
-                            setOpen(false);
+                            </Link>
 
-                        }}
+                            <Link
+                                to="/register"
+                                className="
+px-5
+py-2.5
+rounded-xl
+bg-gradient-to-r
+from-blue-600
+to-cyan-500
+font-semibold
+hover:scale-105
+transition
+shadow-lg
+"
+                            >
 
-                        className="w-full text-left px-4 py-3 hover:bg-slate-800"
+                                Get Started
 
-                    >
+                            </Link>
 
-                        🔒 Change Password
+                        </div>
 
-                    </button>
+                    ) : (
 
-                    <button
+                        <div className="relative ml-4">
 
-                        onClick={handleLogout}
+                            <button
 
-                        className="w-full text-left px-4 py-3 text-red-400 hover:bg-slate-800"
+                                onClick={() => setOpen(!open)}
 
-                    >
+                                className="
+flex
+items-center
+gap-3
+bg-slate-800
+border
+border-slate-700
+hover:border-cyan-500
+rounded-full
+px-5
+py-2.5
+transition-all
+duration-300
+"
 
-                        🚪 Logout
+                            >
 
-                    </button>
+                                <FaUserCircle className="text-cyan-400 text-xl" />
+
+                                <span>
+
+                                    {user?.name}
+
+                                </span>
+
+                            </button>
+
+                            {open && (
+
+                                <div className="
+absolute
+right-0
+mt-4
+w-72
+rounded-2xl
+overflow-hidden
+bg-slate-900
+border
+border-slate-700
+shadow-2xl
+">
+
+                                    <div className="p-5 border-b border-slate-700">
+
+                                        <h3 className="font-bold text-lg">
+
+                                            {user?.name}
+
+                                        </h3>
+
+                                        <p className="text-slate-400 text-sm">
+
+                                            {user?.email}
+
+                                        </p>
+
+                                    </div>
+
+                                    <Link
+
+                                        to="/watchlist"
+
+                                        onClick={() => setOpen(false)}
+
+                                        className="
+flex
+items-center
+gap-3
+px-5
+py-4
+text-white
+hover:bg-slate-800
+hover:text-cyan-400
+transition
+"
+
+                                    >
+
+                                        <FaStar />
+
+                                        Watchlist
+
+                                    </Link>
+
+                                    <Link
+
+                                        to="/history"
+
+                                        onClick={() => setOpen(false)}
+
+                                        className="
+flex
+items-center
+gap-3
+px-5
+py-4
+text-white
+hover:bg-slate-800
+hover:text-cyan-400
+transition
+"
+
+                                    >
+
+                                        <FaHistory />
+
+                                        History
+
+                                    </Link>
+
+                                                        <button
+
+                                        onClick={() => {
+
+                                            setShowPasswordModal(true);
+
+                                            setOpen(false);
+
+                                        }}
+
+                                        className="
+flex
+items-center
+gap-3
+w-full
+px-5
+py-4
+text-white
+hover:bg-slate-800
+hover:text-cyan-400
+transition
+"
+
+                                    >
+
+                                        <FaLock />
+
+                                        Change Password
+
+                                    </button>
+
+                                    <button
+
+                                        onClick={handleLogout}
+
+                                        className="
+flex
+items-center
+gap-3
+w-full
+px-5
+py-4
+text-red-400
+hover:bg-red-500/10
+transition
+"
+
+                                    >
+
+                                        <FaSignOutAlt />
+
+                                        Logout
+
+                                    </button>
+
+                                </div>
+
+                            )}
+
+                        </div>
+
+                    )}
 
                 </div>
 
-            )}
+                {/* Mobile Menu Button */}
 
-        </div>
+                <button
 
-    </div>
+                    onClick={() => setMobileMenu(!mobileMenu)}
 
-    {/* Mobile Menu Button */}
-
-    <button
-
-        className="
+                    className="
 lg:hidden
 text-2xl
-p-2
+text-white
+p-3
 rounded-xl
 hover:bg-slate-800
 transition
 "
 
-        onClick={() => setMobileMenu(!mobileMenu)}
+                >
 
-    >
+                    {
 
-        {mobileMenu ? <FaTimes /> : <FaBars />}
+                        mobileMenu
 
-    </button>
-</>
+                            ?
+
+                            <FaTimes />
+
+                            :
+
+                            <FaBars />
+
+                    }
+
+                </button>
 
             </div>
-            {showPasswordModal && (
 
-    <ChangePasswordModal
+            {/* Mobile Drawer */}
 
-        onClose={() => setShowPasswordModal(false)}
+            {
 
-    />
+                mobileMenu && (
 
-)}
-{mobileMenu && (
-
-    <div className="
+                    <div className="
 lg:hidden
-mt-4
-rounded-2xl
-bg-slate-900/95
-backdrop-blur-xl
+mx-4
+mb-4
+rounded-3xl
+overflow-hidden
+bg-slate-900
 border
 border-slate-800
 shadow-2xl
-overflow-hidden
 ">
 
-        <Link
+                        <div className="px-6 py-5 border-b border-slate-800">
 
-            to="/"
+                            <h2 className="text-xl font-bold text-white">
 
-            onClick={() => setMobileMenu(false)}
+                                📈 CapitalMind
 
-            className="block px-5 py-4 hover:bg-slate-800"
+                            </h2>
 
-        >
+                            <p className="text-sm text-slate-400 mt-1">
 
-            🏠 Home
+                                AI Investment Intelligence
 
-        </Link>
+                            </p>
 
-        <Link
+                        </div>
 
-            to="/dashboard"
+                        <NavLink
 
-            onClick={() => setMobileMenu(false)}
+                            to="/"
 
-            className="block px-5 py-4 hover:bg-slate-800"
+                            onClick={() => setMobileMenu(false)}
 
-        >
+                            className={({ isActive }) =>
 
-            📊 Dashboard
+                                `
 
-        </Link>
+flex
+items-center
+gap-3
+px-6
+py-4
+font-medium
+transition-all
+duration-300
 
-        <Link
+${
 
-            to="/history"
+isActive
 
-            onClick={() => setMobileMenu(false)}
+?
 
-            className="block px-5 py-4 hover:bg-slate-800"
+"bg-blue-600/20 text-cyan-400"
 
-        >
+:
 
-            📜 History
+"text-white hover:bg-slate-800 hover:text-cyan-400"
 
-        </Link>
+}
 
-        <Link
+`
 
-            to="/watchlist"
+                            }
 
-            onClick={() => setMobileMenu(false)}
+                        >
 
-            className="block px-5 py-4 hover:bg-slate-800"
+                            <FaHome />
 
-        >
+                            Home
 
-            ⭐ Watchlist
+                        </NavLink>
 
-        </Link>
+                        {
 
-        <button
+                            isAuthenticated
 
-            onClick={() => {
+                                ?
 
-                setShowPasswordModal(true);
+                                <>
 
-                setMobileMenu(false);
+                                    <NavLink
 
-            }}
+                                        to="/dashboard"
 
-            className="block w-full text-left px-5 py-4 hover:bg-slate-800"
+                                        onClick={() => setMobileMenu(false)}
 
-        >
+                                        className={({ isActive }) =>
 
-            🔒 Change Password
+                                            `
 
-        </button>
+flex
+items-center
+gap-3
+px-6
+py-4
+font-medium
+transition-all
 
-        <button
+${
 
-            onClick={handleLogout}
+isActive
 
-            className="block w-full text-left px-5 py-4 text-red-400 hover:bg-red-500/10 transition"
+?
 
-        >
+"bg-blue-600/20 text-cyan-400"
 
-            🚪 Logout
+:
 
-        </button>
+"text-white hover:bg-slate-800 hover:text-cyan-400"
 
-    </div>
+}
 
-)}
+`
+
+                                        }
+
+                                    >
+
+                                        <FaChartLine />
+
+                                        Dashboard
+
+                                    </NavLink>
+
+                                    <NavLink
+
+                                        to="/history"
+
+                                        onClick={() => setMobileMenu(false)}
+
+                                        className={({ isActive }) =>
+
+                                            `
+
+flex
+items-center
+gap-3
+px-6
+py-4
+font-medium
+transition-all
+
+${
+
+isActive
+
+?
+
+"bg-blue-600/20 text-cyan-400"
+
+:
+
+"text-white hover:bg-slate-800 hover:text-cyan-400"
+
+}
+
+`
+
+                                        }
+
+                                    >
+
+                                        <FaHistory />
+
+                                        History
+
+                                    </NavLink>
+
+                                    <NavLink
+
+                                        to="/watchlist"
+
+                                        onClick={() => setMobileMenu(false)}
+
+                                        className={({ isActive }) =>
+
+                                            `
+
+flex
+items-center
+gap-3
+px-6
+py-4
+font-medium
+transition-all
+
+${
+
+isActive
+
+?
+
+"bg-blue-600/20 text-cyan-400"
+
+:
+
+"text-white hover:bg-slate-800 hover:text-cyan-400"
+
+}
+
+`
+
+                                        }
+
+                                    >
+
+                                        <FaStar />
+
+                                        Watchlist
+
+                                    </NavLink>
+
+                                    <button
+
+                                        onClick={() => {
+
+                                            setShowPasswordModal(true);
+
+                                            setMobileMenu(false);
+
+                                        }}
+
+                                        className="
+w-full
+text-left
+flex
+items-center
+gap-3
+px-6
+py-4
+text-white
+hover:bg-slate-800
+hover:text-cyan-400
+transition
+"
+
+                                    >
+
+                                        <FaLock />
+
+                                        Change Password
+
+                                    </button>
+
+                                    <button
+
+                                        onClick={handleLogout}
+
+                                        className="
+w-full
+text-left
+flex
+items-center
+gap-3
+px-6
+py-4
+text-red-400
+hover:bg-red-500/10
+transition
+"
+
+                                    >
+
+                                        <FaSignOutAlt />
+
+                                        Logout
+
+                                    </button>
+
+                                </>
+
+                                :
+
+                                <>
+
+                                    <Link
+
+                                        to="/login"
+
+                                        onClick={() => setMobileMenu(false)}
+
+                                        className="
+flex
+items-center
+gap-3
+px-6
+py-4
+text-white
+hover:bg-slate-800
+hover:text-cyan-400
+transition
+"
+
+                                    >
+
+                                        <FaSignInAlt />
+
+                                        Login
+
+                                    </Link>
+
+                                    <Link
+
+                                        to="/register"
+
+                                        onClick={() => setMobileMenu(false)}
+
+                                        className="
+flex
+items-center
+gap-3
+px-6
+py-4
+text-white
+hover:bg-slate-800
+hover:text-cyan-400
+transition
+"
+
+                                    >
+
+                                        <FaUserPlus />
+
+                                        Register
+
+                                    </Link>
+
+                                </>
+
+                        }
+
+                    </div>
+
+                )
+
+            }
+
+            {
+
+                showPasswordModal && (
+
+                    <ChangePasswordModal
+
+                        onClose={() =>
+
+                            setShowPasswordModal(false)
+
+                        }
+
+                    />
+
+                )
+
+            }
 
         </nav>
 
