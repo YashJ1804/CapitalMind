@@ -3,8 +3,14 @@ const { generateContent } = require("../services/geminiService");
 const makeInvestmentDecision = async (
     profile,
     quote,
-    news
+    news = [],
+    risk
 ) => {
+
+    const newsSection =
+        news && news.length > 0
+            ? JSON.stringify(news, null, 2)
+            : "No recent news available.";
 
     const prompt = `
 You are Warren Buffett and a senior investment analyst.
@@ -27,7 +33,7 @@ ${JSON.stringify(quote, null, 2)}
 RECENT NEWS
 ==============================
 
-${JSON.stringify(news, null, 2)}
+${newsSection}
 
 ==============================
 TASK
@@ -57,17 +63,11 @@ Return ONLY valid JSON.
   "recommendation": "",
   "score": 0,
   "confidence": 0,
-
   "riskLevel": "",
-
   "investmentHorizon": "",
-
   "investorType": "",
-
   "sectorOutlook": "",
-
   "volatility": "",
-
   "pros": [],
   "cons": [],
   "risks": [],
@@ -78,7 +78,6 @@ Return ONLY valid JSON.
 
     let text = await generateContent(prompt);
 
-    // Remove markdown if Gemini adds it
     text = text.replace(/```json/g, "");
     text = text.replace(/```/g, "");
     text = text.trim();

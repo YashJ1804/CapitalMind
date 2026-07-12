@@ -61,7 +61,7 @@ function Register() {
 
                 <h1 className="text-4xl font-bold text-white text-center">
 
-                    Create Account
+                    Join CapitalMind
 
                 </h1>
 

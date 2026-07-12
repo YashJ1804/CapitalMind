@@ -1,77 +1,118 @@
 const investmentGraph = require("../graph/investmentGraph");
 const AnalysisHistory = require("../models/AnalysisHistory");
 const AnalysisCache = require("../models/AnalysisCache");
-const analyzeCompany = async (req, res, next) => {
+
+const analyzeCompany = async (req, res) => {
 
     try {
 
         const { company } = req.body;
 
+        if (!company || company.trim() === "") {
+
+            return res.status(400).json({
+
+                success: false,
+
+                message: "Please enter a company name."
+
+            });
+
+        }
+
+        const companyName = company.trim().toUpperCase();
+
         const cache = await AnalysisCache.findOne({
-    company: company.toUpperCase()
-});
 
-const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
+            company: companyName
 
-let useCache = false;
+        });
 
-if (cache) {
+        const CACHE_DURATION = 24 * 60 * 60 * 1000;
 
-    const age = Date.now() - new Date(cache.updatedAt).getTime();
+        let result;
 
-    if (age < CACHE_DURATION) {
+        if (cache) {
 
-        useCache = true;
+            const age = Date.now() - new Date(cache.updatedAt).getTime();
 
-    }
+            if (age < CACHE_DURATION) {
 
-}
+                console.log("⚡ Returning Cached Analysis");
 
-let result;
+                result = {
 
-if (useCache) {
+                    analysis: cache.analysis,
+                    profile: cache.profile,
+                    quote: cache.quote,
+                    news: cache.news,
+                    chart: cache.chart
 
-    console.log("⚡ Returning Cached Analysis");
+                };
 
-    result = {
+            }
 
-        analysis: cache.analysis,
+        }
 
-        profile: cache.profile,
+        if (!result) {
 
-        quote: cache.quote,
+            console.log("🤖 Running LangGraph");
 
-        news: cache.news,
+            result = await investmentGraph.invoke({
 
-    };
+                company
 
-} else {
+            });
 
-    console.log("🤖 Running LangGraph");
+            if (!result.profile) {
 
-    result = await investmentGraph.invoke({
+                return res.status(404).json({
 
-        company
+                    success: false,
 
-    });
+                    message: "Company profile not found."
 
-    await AnalysisCache.create({
+                });
 
-        company: company.toUpperCase(),
+            }
 
-        analysis: result.analysis,
+            if (!result.quote) {
 
-        profile: result.profile,
+                return res.status(404).json({
 
-        quote: result.quote,
+                    success: false,
 
-        news: result.news,
+                    message: "Market data unavailable."
 
-        chart: result.chart
+                });
 
-    });
+            }
 
-}
+            if (!result.analysis) {
+
+                return res.status(500).json({
+
+                    success: false,
+
+                    message: "AI failed to generate investment analysis."
+
+                });
+
+            }
+
+            await AnalysisCache.create({
+
+                company: companyName,
+
+                analysis: result.analysis,
+                profile: result.profile,
+                quote: result.quote,
+                news: result.news,
+                chart: result.chart
+
+            });
+
+        }
 
         await AnalysisHistory.create({
 
@@ -89,19 +130,17 @@ if (useCache) {
 
         });
 
-        return res.json({
+        return res.status(200).json({
 
             success: true,
 
             data: {
 
                 analysis: result.analysis,
-
                 profile: result.profile,
-
                 quote: result.quote,
-
-                news: result.news
+                news: result.news,
+                chart: result.chart
 
             }
 
@@ -111,7 +150,16 @@ if (useCache) {
 
     catch (error) {
 
-        next(error);
+        console.error("❌ Analysis Controller Error");
+        console.error(error);
+
+        return res.status(500).json({
+
+            success: false,
+
+            message: error.message || "Something went wrong while analyzing the company."
+
+        });
 
     }
 

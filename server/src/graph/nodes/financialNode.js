@@ -1,21 +1,49 @@
-const { getQuote } = require("../../tools/financialTool");
-const { getChartData } = require("../../tools/chartTool");
+const market = require("../../providers/marketProvider");
 
 const financialNode = async (state) => {
 
-    console.log("💰 Financial Node");
+    console.log("💰 Financial Node", new Date().toLocaleTimeString());
 
-    const [quote, chart] = await Promise.all([
+    let quote = null;
+    let chart = null;
 
-        getQuote(state.symbol),
+    try {
 
-        getChartData(state.symbol)
+        [quote, chart] = await Promise.all([
 
-    ]);
+            market.getQuote(state.symbol),
+
+            market.getChart(state.symbol)
+
+        ]);
+
+    } catch (error) {
+
+        console.log("⚠ Financial data partially unavailable.");
+
+        try {
+
+            quote = await market.getQuote(state.symbol);
+
+        } catch (err) {
+
+            console.log("⚠ Quote unavailable.");
+
+        }
+
+        try {
+
+            chart = await market.getChart(state.symbol);
+
+        } catch (err) {
+
+            console.log("⚠ Chart unavailable.");
+
+        }
+
+    }
 
     return {
-
-        ...state,
 
         quote,
 
@@ -26,5 +54,7 @@ const financialNode = async (state) => {
 };
 
 module.exports = {
+
     financialNode
+
 };

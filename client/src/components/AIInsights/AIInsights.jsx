@@ -40,7 +40,7 @@ function AIInsights({ analysis }) {
 
             <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-6">
 
-                🤖 AI Insights
+                🤖 CapitalMind Insights
 
             </h2>
 

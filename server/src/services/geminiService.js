@@ -1,8 +1,14 @@
-const ai = require("../config/gemini");
+const { primaryAI, backupAI } = require("../config/gemini");
 
-const generateContent = async (prompt) => {
+const cleanResponse = (text) => {
+    text = text.replace(/```json/g, "");
+    text = text.replace(/```/g, "");
+    return text.trim();
+};
 
-    const response = await ai.models.generateContent({
+const generateWithAI = async (client, prompt) => {
+
+    const response = await client.models.generateContent({
 
         model: "gemini-2.5-flash",
 
@@ -10,20 +16,53 @@ const generateContent = async (prompt) => {
 
     });
 
-    let text = response.text;
+    return cleanResponse(response.text);
 
-    text = text.replace(/```json/g, "");
+};
 
-    text = text.replace(/```/g, "");
+const generateContent = async (prompt) => {
 
-    text = text.trim();
+    try {
 
-    return text;
+        console.log("🟢 Using Primary Gemini Key");
 
-}
+        return await generateWithAI(primaryAI, prompt);
 
-module.exports={
+    } catch (error) {
+
+        const status = error.status || error.error?.code;
+
+        if (
+            status === 429 ||
+            status === 401 ||
+            status === 403
+        ) {
+
+            console.log("🟡 Primary Key Failed");
+            console.log("🔄 Switching to Backup Gemini Key...");
+
+            try {
+
+                return await generateWithAI(backupAI, prompt);
+
+            } catch (backupError) {
+
+                console.log("🔴 Backup Key Failed");
+
+                throw backupError;
+
+            }
+
+        }
+
+        throw error;
+
+    }
+
+};
+
+module.exports = {
 
     generateContent
 
-}
+};

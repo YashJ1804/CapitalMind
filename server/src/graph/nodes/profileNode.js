@@ -1,14 +1,12 @@
-const { getCompanyProfile } = require("../../tools/companyTool");
+const market = require("../../providers/marketProvider");
 
 const profileNode = async (state) => {
 
-    console.log("🏢 Profile Node");
+    console.log("🏢 Profile Node", new Date().toLocaleTimeString());
 
-    const profile = await getCompanyProfile(state.symbol);
+    const profile = await market.getProfile(state.symbol);
 
     return {
-
-        ...state,
 
         profile
 
@@ -16,4 +14,8 @@ const profileNode = async (state) => {
 
 };
 
-module.exports = { profileNode };
+module.exports = {
+
+    profileNode
+
+};

@@ -1,13 +1,26 @@
-const { getCompanyNews } = require("../../tools/newsTool");
+const market = require("../../providers/marketProvider");
 
 const newsNode = async (state) => {
-    console.log("📰 News Node");
-    const news = await getCompanyNews(state.symbol);
+
+    console.log("📰 News Node", new Date().toLocaleTimeString());
+
+    let news = [];
+
+    try {
+
+        news = await market.getNews(state.symbol);
+
+    } catch (error) {
+
+        console.log("⚠ News unavailable, continuing analysis...");
+        console.log(error.message);
+
+        news = [];
+
+    }
 
     return {
 
-
-        ...state,
         news
 
     };
@@ -15,5 +28,7 @@ const newsNode = async (state) => {
 };
 
 module.exports = {
+
     newsNode
+
 };

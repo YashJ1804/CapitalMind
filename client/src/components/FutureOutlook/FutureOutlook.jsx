@@ -22,7 +22,7 @@ function FutureOutlook({ outlook }) {
 
                     <p className="text-slate-400 text-sm mt-1">
 
-                        AI prediction based on current market trends
+                        CapitalMind forecast based on market trends
 
                     </p>
 

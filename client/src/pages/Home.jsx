@@ -15,21 +15,65 @@ import AIInsights from "../components/AIInsights/AIInsights";
 import NewsSection from "../components/NewsSection/NewsSection";
 import StockChart from "../components/StockChart/StockChart";
 import SkeletonLoader from "../components/SkeletonLoader/SkeletonLoader";
+import {useEffect} from "react";
+
+import MarketSnapshot from "../components/MarketSnapshot/MarketSnapshot";
+
 import api from "../services/api";
 
 function Home() {
     const [company, setCompany] = useState("");
     const [loading, setLoading] = useState(false);
+    const [loadingStage, setLoadingStage] = useState("");
     const [result, setResult] = useState(null);
+    const [market,setMarket]=useState(null);
     const [error, setError] = useState("");
+    useEffect(() => {
+
+    const fetchMarket = async () => {
+
+        try {
+
+            const res = await api.get("/market");
+
+            setMarket(res.data.data);
+
+        } catch (error) {
+
+            console.error("Market fetch failed:", error);
+
+        }
+
+    };
+
+    fetchMarket();
+
+}, []);
 
     const handleAnalyze = async () => {
 
         if (!company.trim()) return;
 
         setLoading(true);
-        setResult(null);
-        setError("");
+setLoadingStage("🔍 Searching Company...");
+setResult(null);
+setError("");
+
+const timer1 = setTimeout(() => {
+    setLoadingStage("🏢 Fetching Company Profile...");
+}, 2500);
+
+const timer2 = setTimeout(() => {
+    setLoadingStage("💰 Loading Financial Data...");
+}, 5000);
+
+const timer3 = setTimeout(() => {
+    setLoadingStage("📰 Reading Latest News...");
+}, 8000);
+
+const timer4 = setTimeout(() => {
+    setLoadingStage("🤖 AI is Making Investment Decision...");
+}, 12000);
 
         try {
 
@@ -37,6 +81,7 @@ function Home() {
                 company: company.trim(),
             });
             console.log(response.data.data);
+            console.log(JSON.stringify(response.data.data, null, 2));
 
             setResult(response.data.data);
 
@@ -51,7 +96,13 @@ function Home() {
 
         } finally {
 
-            setLoading(false);
+            clearTimeout(timer1);
+clearTimeout(timer2);
+clearTimeout(timer3);
+clearTimeout(timer4);
+
+setLoading(false);
+setLoadingStage("");
 
         }
 
@@ -69,15 +120,34 @@ function Home() {
 
 <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-center leading-tight">
 
-    AI Investment Advisor
+    CapitalMind
 
 </h1>
 
 <p className="text-slate-400 text-base sm:text-lg md:text-xl text-center mt-6 max-w-3xl mx-auto">
 
-    Invest Smarter with Artificial Intelligence
+    AI-Powered Investment Intelligence
 
 </p>
+{
+
+market && (
+
+<div className="mt-12">
+
+<MarketSnapshot
+
+market={market}
+
+setCompany={setCompany}
+
+/>
+
+</div>
+
+)
+
+}
 
                     {/* Search */}
 
@@ -127,7 +197,8 @@ function Home() {
 
                         key={stock}
 
-                        onClick={() => setCompany(stock)}
+                        onClick={() => !loading && setCompany(stock)}
+disabled={loading}
 
                         className="px-5 py-2 rounded-full bg-slate-800 hover:bg-slate-700 transition"
 
@@ -191,15 +262,6 @@ function Home() {
 
                     {/* Loader */}
 
-                    {loading && (
-
-                        <div className="max-w-7xl mx-auto mt-10">
-
-            <SkeletonLoader />
-
-        </div>
-
-                    )}
 
                     {/* Dashboard */}
 

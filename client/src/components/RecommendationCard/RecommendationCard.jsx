@@ -211,18 +211,8 @@ function RecommendationCard({ result, profile }) {
 
                     </p>
 
-                    <h2 className="mt-2 text-2xl sm:text-3xl font-bold">
-
-                        <CountUp
-
-    end={result.score}
-
-    duration={2}
-
-    suffix="/100"
-
-/>
-
+                   <h2 className="mt-2 text-2xl sm:text-3xl font-bold">
+                    {result.score}/100
                     </h2>
 
                     <p className="text-slate-400 mt-1">
@@ -255,22 +245,12 @@ function RecommendationCard({ result, profile }) {
 
                     <p className="text-slate-400 text-sm uppercase tracking-wide">
 
-                        AI Confidence
+                        CapitalMind Confidence
 
                     </p>
 
                     <h2 className="mt-2 text-3xl font-bold">
-
-                        <CountUp
-
-    end={result.confidence}
-
-    duration={2}
-
-    suffix="%"
-
-/>
-
+                    {result.confidence}%
                     </h2>
 
                     <p className="text-slate-400 mt-1">

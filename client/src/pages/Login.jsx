@@ -65,7 +65,7 @@ function Login() {
 
                 <h1 className="text-4xl font-bold text-white text-center">
 
-                    Welcome Back
+                    Welcome Back to CapitalMind
 
                 </h1>
 
