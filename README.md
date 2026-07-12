@@ -324,10 +324,10 @@ B.Tech Computer Science Engineering
 Lovely Professional University
 
 GitHub:
-https://github.com/YOUR_USERNAME
+https://github.com/YashJ1804
 
 LinkedIn:
-https://linkedin.com/in/YOUR_PROFILE
+https://linkedin.com/in/yashk1804
 
 ---
 
