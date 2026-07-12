@@ -112,21 +112,69 @@ setLoadingStage("");
         <>
             <Navbar />
 
-            <div className="min-h-screen bg-slate-950 text-white px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24">
+
+                <div
+className="
+min-h-screen
+bg-slate-950
+text-white
+px-4
+sm:px-6
+lg:px-8
+pt-32
+pb-20
+">
 
                 <div className="max-w-6xl mx-auto">
 
                     {/* Hero */}
 
-<h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-center leading-tight">
+<h1
+className="
+text-5xl
+sm:text-6xl
+md:text-7xl
+lg:text-8xl
+font-black
+tracking-tight
+text-center
+leading-none
+">
 
-    CapitalMind
+CapitalMind
 
 </h1>
 
-<p className="text-slate-400 text-base sm:text-lg md:text-xl text-center mt-6 max-w-3xl mx-auto">
+<p
+className="
+text-xl
+sm:text-2xl
+text-slate-300
+text-center
+mt-8
+font-medium
+">
 
-    AI-Powered Investment Intelligence
+AI-Powered Investment Intelligence Platform
+
+</p>
+
+<p
+className="
+text-slate-500
+text-center
+mt-5
+max-w-3xl
+mx-auto
+leading-8
+">
+
+Analyze any publicly traded company using
+live market data,
+financial fundamentals,
+AI reasoning,
+news sentiment,
+and intelligent investment recommendations.
 
 </p>
 {
@@ -151,7 +199,7 @@ setCompany={setCompany}
 
                     {/* Search */}
 
-                   <div className="mt-10 sm:mt-12 max-w-3xl mx-auto">
+                   <div className="mt-14 max-w-4xl mx-auto">
 
                         <SearchBar
                             company={company}
@@ -165,21 +213,37 @@ setCompany={setCompany}
 
     <div className="mt-20">
 
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-12 text-center">
+        <div className="
+rounded-3xl
+bg-slate-900/80
+backdrop-blur-xl
+border
+border-slate-800
+shadow-2xl
+p-14
+text-center
+">
 
-            <div className="text-6xl mb-6">
+            <div className="text-7xl mb-8">
 
                 📈
 
             </div>
 
-            <h2 className="text-4xl font-bold">
+            <h2 className="text-5xl font-bold">
 
                 Analyze Any Public Company
 
             </h2>
 
-            <p className="text-slate-400 mt-6 text-lg">
+            <p className="
+text-slate-400
+mt-8
+text-xl
+leading-9
+max-w-2xl
+mx-auto
+">
 
                 Get AI-powered investment recommendations,
 
@@ -200,7 +264,19 @@ setCompany={setCompany}
                         onClick={() => !loading && setCompany(stock)}
 disabled={loading}
 
-                        className="px-5 py-2 rounded-full bg-slate-800 hover:bg-slate-700 transition"
+                        className="
+px-6
+py-3
+rounded-full
+bg-slate-800
+border
+border-slate-700
+hover:border-blue-500
+hover:bg-slate-700
+hover:-translate-y-1
+transition-all
+duration-300
+"
 
                     >
 
@@ -222,7 +298,16 @@ disabled={loading}
 
     <div className="mt-8">
 
-        <div className="bg-red-500/10 border border-red-500 rounded-2xl p-8 text-center">
+        <div className="
+rounded-3xl
+bg-red-500/10
+border
+border-red-500/40
+backdrop-blur-xl
+shadow-xl
+p-10
+text-center
+">
 
             <div className="text-5xl mb-4">
 
@@ -267,7 +352,7 @@ disabled={loading}
 
                     {!loading && result && (
 
-                        <div className="mt-12 space-y-8">
+                        <div className="mt-20 space-y-10">
 
                            <RecommendationCard
     result={result.analysis}
@@ -318,6 +403,27 @@ disabled={loading}
                     )}
 
                 </div>
+                <footer className="mt-32 border-t border-slate-800 py-12 text-center">
+
+    <h3 className="text-xl font-bold">
+
+        CapitalMind
+
+    </h3>
+
+    <p className="text-slate-500 mt-3">
+
+        AI-Powered Investment Intelligence
+
+    </p>
+
+    <p className="text-slate-600 mt-2 text-sm">
+
+        Built with React • Node.js • MongoDB • LangGraph • Gemini AI
+
+    </p>
+
+</footer>
 
             </div>
 

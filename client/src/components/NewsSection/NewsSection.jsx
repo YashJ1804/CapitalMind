@@ -8,87 +8,158 @@ function NewsSection({ news }) {
 
     return (
 
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg hover:border-slate-700 transition-all duration-300">
+        <div className="rounded-3xl border border-slate-800 bg-slate-900 shadow-xl p-6 lg:p-8">
 
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-8">
+            {/* Header */}
 
-                <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold">
+            <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-8">
 
-                    📰 Latest News
+                <div>
 
-                </h2>
+                    <h2 className="text-3xl font-black">
 
-                <span className="text-slate-400 text-sm">
+                        📰 Latest News
 
-                    Top {Math.min(news.length, 3)} Headlines
+                    </h2>
 
-                </span>
+                    <p className="text-slate-500 mt-2">
+
+                        Recent headlines impacting this company
+
+                    </p>
+
+                </div>
+
+                <div className="px-4 py-2 rounded-full bg-slate-950 border border-slate-800 text-slate-400 text-sm">
+
+                    {Math.min(news.length, 3)} Articles
+
+                </div>
 
             </div>
 
+            {/* News */}
+
             <div className="space-y-5">
 
-                {news.slice(0, 3).map((item, index) => (
+                {
 
-                    <a
+                    news.slice(0, 3).map((item, index) => (
 
-                        key={index}
+                        <a
 
-                        href={item.url}
+                            key={index}
 
-                        target="_blank"
+                            href={item.url}
 
-                        rel="noopener noreferrer"
+                            target="_blank"
 
-                        className="block bg-slate-800/50 border border-slate-700 rounded-xl p-5 hover:border-blue-500 hover:bg-slate-800 transition-all duration-300"
+                            rel="noopener noreferrer"
 
-                    >
+                            className="
+                            block
+                            rounded-2xl
+                            border
+                            border-slate-800
+                            bg-slate-950
+                            p-6
+                            hover:border-blue-500
+                            hover:-translate-y-1
+                            hover:shadow-xl
+                            transition-all
+                            duration-300
+                            "
 
-                        <div className="flex items-start gap-4">
+                        >
 
-                            <div className="text-3xl flex-shrink-0">
+                            <div className="flex gap-5">
 
-                                📰
+                                {/* Icon */}
 
-                            </div>
+                                <div
+                                    className="
+                                    w-14
+                                    h-14
+                                    rounded-xl
+                                    bg-blue-500/10
+                                    border
+                                    border-blue-500/20
+                                    flex
+                                    items-center
+                                    justify-center
+                                    flex-shrink-0
+                                    text-2xl
+                                    "
+                                >
 
-                            <div className="flex-1">
+                                    📰
 
-                                <h3 className="text-lg sm:text-xl font-semibold leading-relaxed">
+                                </div>
 
-                                    {item.headline}
+                                {/* Content */}
 
-                                </h3>
+                                <div className="flex-1">
 
-                                <p className="text-slate-400 mt-3 text-sm sm:text-base line-clamp-3">
+                                    <h3 className="text-xl font-bold leading-relaxed text-white">
 
-                                    {item.summary || "No summary available."}
+                                        {item.headline}
 
-                                </p>
+                                    </h3>
 
-                                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mt-5 text-sm text-slate-500">
+                                    <p className="text-slate-400 mt-4 leading-7 line-clamp-3">
 
-                                    <span className="font-medium">
+                                        {
 
-                                        {item.source}
+                                            item.summary ||
 
-                                    </span>
+                                            "No summary available."
 
-                                    <span>
+                                        }
 
-                                        {new Date(item.date * 1000).toLocaleDateString()}
+                                    </p>
 
-                                    </span>
+                                    <div className="flex flex-wrap justify-between items-center gap-4 mt-6">
+
+                                        <span
+                                            className="
+                                            px-3
+                                            py-1
+                                            rounded-full
+                                            bg-slate-800
+                                            text-slate-300
+                                            text-sm
+                                            "
+                                        >
+
+                                            {item.source}
+
+                                        </span>
+
+                                        <span className="text-slate-500 text-sm">
+
+                                            {
+
+                                                new Date(
+
+                                                    item.date * 1000
+
+                                                ).toLocaleDateString()
+
+                                            }
+
+                                        </span>
+
+                                    </div>
 
                                 </div>
 
                             </div>
 
-                        </div>
+                        </a>
 
-                    </a>
+                    ))
 
-                ))}
+                }
 
             </div>
 

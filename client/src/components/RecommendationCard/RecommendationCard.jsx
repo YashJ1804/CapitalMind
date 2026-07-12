@@ -9,10 +9,8 @@ function RecommendationCard({ result, profile }) {
         try {
 
             await api.post("/watchlist", {
-
                 symbol: profile.ticker,
                 company: profile.name
-
             });
 
             toast.success("Added to Watchlist");
@@ -20,11 +18,8 @@ function RecommendationCard({ result, profile }) {
         } catch (error) {
 
             toast.error(
-
                 error.response?.data?.message ||
-
                 "Failed to add to Watchlist"
-
             );
 
         }
@@ -35,60 +30,38 @@ function RecommendationCard({ result, profile }) {
 
         const score = result.score;
 
-        if (score >= 95) {
-
+        if (score >= 95)
             return {
-
                 text: "🟢 Strong BUY",
-                bg: "bg-green-600/20",
+                bg: "bg-green-500/15",
                 color: "text-green-400"
-
             };
 
-        }
-
-        if (score >= 85) {
-
+        if (score >= 85)
             return {
-
                 text: "🟢 BUY",
-                bg: "bg-green-500/20",
+                bg: "bg-green-500/15",
                 color: "text-green-400"
-
             };
 
-        }
-
-        if (score >= 70) {
-
+        if (score >= 70)
             return {
-
                 text: "🟡 HOLD",
-                bg: "bg-yellow-500/20",
+                bg: "bg-yellow-500/15",
                 color: "text-yellow-400"
-
             };
 
-        }
-
-        if (score >= 50) {
-
+        if (score >= 50)
             return {
-
                 text: "🟠 Weak HOLD",
-                bg: "bg-orange-500/20",
+                bg: "bg-orange-500/15",
                 color: "text-orange-400"
-
             };
-
-        }
 
         return {
-
             text: "🔴 PASS",
-            bg: "bg-red-500/20",
+            bg: "bg-red-500/15",
             color: "text-red-400"
-
         };
 
     };
@@ -96,9 +69,7 @@ function RecommendationCard({ result, profile }) {
     const getConfidenceLabel = () => {
 
         if (result.confidence >= 90) return "Very High";
-
         if (result.confidence >= 75) return "High";
-
         if (result.confidence >= 60) return "Moderate";
 
         return "Low";
@@ -110,11 +81,8 @@ function RecommendationCard({ result, profile }) {
         const score = result.score;
 
         if (score >= 90) return "Excellent";
-
         if (score >= 80) return "Very Good";
-
         if (score >= 70) return "Good";
-
         if (score >= 60) return "Average";
 
         return "Poor";
@@ -125,33 +93,29 @@ function RecommendationCard({ result, profile }) {
 
     return (
 
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg">
+        <div className="rounded-3xl border border-slate-800 bg-slate-900 shadow-xl p-6 lg:p-8">
 
-            {/* Company */}
+            {/* Header */}
 
-           <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
+            <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
 
-                <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+                <div className="flex items-center gap-5">
 
                     <img
-
                         src={profile.logo}
-
                         alt={profile.name}
-
-                    className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl bg-white p-2"
-
+                        className="w-16 h-16 rounded-2xl bg-white p-2 shadow-md"
                     />
 
                     <div>
 
-                        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
+                        <h2 className="text-3xl lg:text-4xl font-black text-white">
 
                             {profile.name}
 
                         </h2>
 
-                        <p className="text-slate-400">
+                        <p className="text-slate-400 mt-1">
 
                             {profile.ticker}
 
@@ -165,7 +129,7 @@ function RecommendationCard({ result, profile }) {
 
                     onClick={addToWatchlist}
 
-                    className="w-full sm:w-auto bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-5 py-3 rounded-xl transition"
+                    className="px-6 py-3 rounded-xl bg-yellow-500 text-black font-semibold hover:bg-yellow-400 transition-all hover:scale-105"
 
                 >
 
@@ -175,15 +139,19 @@ function RecommendationCard({ result, profile }) {
 
             </div>
 
-            {/* Recommendation */}
+            {/* Divider */}
 
-            <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="my-8 border-t border-slate-800" />
+
+            {/* Metrics */}
+
+            <div className="grid md:grid-cols-3 gap-6">
 
                 {/* Recommendation */}
 
-                <div>
+                <div className="rounded-2xl border border-slate-800 bg-slate-950 p-6">
 
-                    <p className="text-slate-400 text-sm uppercase tracking-wide">
+                    <p className="uppercase text-xs tracking-widest text-slate-500">
 
                         Recommendation
 
@@ -191,7 +159,7 @@ function RecommendationCard({ result, profile }) {
 
                     <div
 
-                        className={`inline-block px-4 sm:px-6 py-2 sm:py-3 rounded-full text-base sm:text-lg lg:text-xl font-bold mt-3 ${recommendation.bg} ${recommendation.color}`}
+                        className={`inline-block mt-5 px-5 py-3 rounded-full text-lg font-bold ${recommendation.bg} ${recommendation.color}`}
 
                     >
 
@@ -201,31 +169,33 @@ function RecommendationCard({ result, profile }) {
 
                 </div>
 
-                {/* Investment Score */}
+                {/* Score */}
 
-                <div>
+                <div className="rounded-2xl border border-slate-800 bg-slate-950 p-6">
 
-                    <p className="text-slate-400 text-sm uppercase tracking-wide">
+                    <p className="uppercase text-xs tracking-widest text-slate-500">
 
                         Investment Score
 
                     </p>
 
-                   <h2 className="mt-2 text-2xl sm:text-3xl font-bold">
-                    {result.score}/100
+                    <h2 className="text-4xl font-black mt-3">
+
+                        <CountUp end={result.score} duration={2} />/100
+
                     </h2>
 
-                    <p className="text-slate-400 mt-1">
+                    <p className="text-slate-400 mt-2">
 
                         {getScoreLabel()}
 
                     </p>
 
-                    <div className="w-full h-2 sm:h-3 bg-slate-700 rounded-full mt-4">
+                    <div className="mt-5 h-3 bg-slate-800 rounded-full overflow-hidden">
 
                         <div
 
-                            className="h-3 rounded-full bg-green-500 transition-all duration-700"
+                            className="h-full bg-green-500 rounded-full transition-all duration-1000"
 
                             style={{
 
@@ -241,29 +211,31 @@ function RecommendationCard({ result, profile }) {
 
                 {/* Confidence */}
 
-                <div>
+                <div className="rounded-2xl border border-slate-800 bg-slate-950 p-6">
 
-                    <p className="text-slate-400 text-sm uppercase tracking-wide">
+                    <p className="uppercase text-xs tracking-widest text-slate-500">
 
-                        CapitalMind Confidence
+                        AI Confidence
 
                     </p>
 
-                    <h2 className="mt-2 text-3xl font-bold">
-                    {result.confidence}%
+                    <h2 className="text-4xl font-black mt-3">
+
+                        <CountUp end={result.confidence} duration={2} />%
+
                     </h2>
 
-                    <p className="text-slate-400 mt-1">
+                    <p className="text-slate-400 mt-2">
 
                         {getConfidenceLabel()} Confidence
 
                     </p>
 
-                    <div className="w-full h-3 bg-slate-700 rounded-full mt-4">
+                    <div className="mt-5 h-3 bg-slate-800 rounded-full overflow-hidden">
 
                         <div
 
-                            className="h-3 rounded-full bg-blue-500 transition-all duration-700"
+                            className="h-full bg-blue-500 rounded-full transition-all duration-1000"
 
                             style={{
 

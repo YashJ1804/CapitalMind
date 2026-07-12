@@ -1,3 +1,6 @@
+import { FaSearch } from "react-icons/fa";
+import { FaWandMagicSparkles } from "react-icons/fa6";
+
 function SearchBar({
 
     company,
@@ -12,51 +15,183 @@ function SearchBar({
 
     return (
 
-        <div className="flex flex-col sm:flex-row gap-4 w-full">
+        <div
+            className="
+            rounded-3xl
+            bg-slate-900/80
+            backdrop-blur-xl
+            border
+            border-slate-800
+            shadow-2xl
+            p-3
+            "
+        >
 
-            <input
+            <div className="flex flex-col lg:flex-row gap-4">
 
-                type="text"
+                {/* Search Input */}
 
-                className="w-full flex-1 bg-slate-900 border border-slate-700 rounded-xl p-3 sm:p-4 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 text-sm sm:text-base"
+                <div className="relative flex-1">
 
-                placeholder="Search Apple, NVIDIA, Tesla..."
+                    <FaSearch
+                        className="
+                        absolute
+                        left-5
+                        top-1/2
+                        -translate-y-1/2
+                        text-slate-500
+                        "
+                    />
 
-                value={company}
+                    <input
 
-                disabled={loading}
+                        type="text"
 
-                onChange={(e) => setCompany(e.target.value)}
+                        placeholder="Search Apple, NVIDIA, Tesla, Microsoft..."
 
-                onKeyDown={(e) => {
+                        value={company}
 
-                    if (e.key === "Enter" && !loading) {
+                        disabled={loading}
 
-                        handleAnalyze();
+                        onChange={(e) =>
+
+                            setCompany(e.target.value)
+
+                        }
+
+                        onKeyDown={(e) => {
+
+                            if (
+
+                                e.key === "Enter" &&
+
+                                !loading
+
+                            ) {
+
+                                handleAnalyze();
+
+                            }
+
+                        }}
+
+                        className="
+                        w-full
+                        pl-14
+                        pr-5
+                        py-5
+                        rounded-2xl
+                        bg-slate-950
+                        border
+                        border-slate-700
+                        text-white
+                        text-lg
+                        placeholder:text-slate-500
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-500
+                        focus:border-blue-500
+                        transition-all
+                        duration-300
+                        "
+
+                    />
+
+                </div>
+
+                {/* Analyze Button */}
+
+                <button
+
+                    onClick={handleAnalyze}
+
+                    disabled={
+
+                        loading ||
+
+                        !company.trim()
 
                     }
 
-                }}
+                    className={`
 
-            />
+                    flex
 
-            <button
+                    items-center
 
-                onClick={handleAnalyze}
+                    justify-center
 
-                disabled={loading || !company.trim()}
+                    gap-3
 
-                className={`w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold transition-all duration-200
-                    ${loading || !company.trim()
-                        ? "bg-slate-700 cursor-not-allowed"
-                        : "bg-blue-600 hover:bg-blue-700"
-                    }`}
+                    px-8
 
-            >
+                    py-5
 
-                {loading ? "Analyzing..." : "Analyze"}
+                    rounded-2xl
 
-            </button>
+                    font-bold
+
+                    text-lg
+
+                    transition-all
+
+                    duration-300
+
+                    shadow-xl
+
+                    ${
+
+                        loading ||
+
+                        !company.trim()
+
+                            ?
+
+                            "bg-slate-700 text-slate-400 cursor-not-allowed"
+
+                            :
+
+                            "bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 hover:scale-105"
+
+                    }
+
+                    `}
+
+                >
+
+                    <FaWandMagicSparkles className="text-xl" />
+
+                    {
+
+                        loading
+
+                            ?
+
+                            "Analyzing..."
+
+                            :
+
+                            "Analyze"
+
+                    }
+
+                </button>
+
+            </div>
+
+            {/* Hint */}
+
+            <p className="text-sm text-slate-500 mt-4 px-2">
+
+                💡 Try searching:
+
+                <span className="text-slate-300">
+
+                    {" "}Apple, Microsoft, NVIDIA, Amazon, Tesla
+
+                </span>
+
+            </p>
 
         </div>
 
