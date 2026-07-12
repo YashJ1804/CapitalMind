@@ -210,7 +210,7 @@ CapitalMind
 Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/CapitalMind.git
+git clone https://github.com/YASHJ1804/CapitalMind.git
 ```
 
 Go into the project
