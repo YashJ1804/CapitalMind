@@ -1,6 +1,6 @@
 import api from "../../services/api";
 import toast from "react-hot-toast";
-import CountUp from "react-countup";
+
 
 function RecommendationCard({ result, profile }) {
 
@@ -181,7 +181,7 @@ function RecommendationCard({ result, profile }) {
 
                     <h2 className="text-4xl font-black mt-3">
 
-                        <CountUp end={result.score} duration={2} />/100
+                        {result.score}
 
                     </h2>
 
@@ -221,7 +221,7 @@ function RecommendationCard({ result, profile }) {
 
                     <h2 className="text-4xl font-black mt-3">
 
-                        <CountUp end={result.confidence} duration={2} />%
+                        {result.confidence}
 
                     </h2>
 
