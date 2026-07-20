@@ -1,4 +1,4 @@
-const ApiError = require("./ApiError");
+const ApiError = require("../../utils/ApiError");
 
 class NotFoundError extends ApiError {
     constructor(message = "Resource not found") {
