@@ -66,7 +66,7 @@ function Home() {
 
         if (!isAuthenticated) {
 
-            toast("🔒 Please login to analyze stocks.", {
+            toast(" Please login to analyze stocks.", {
 
                 icon: "🔒"
 

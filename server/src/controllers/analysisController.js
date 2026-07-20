@@ -100,17 +100,22 @@ const analyzeCompany = async (req, res) => {
 
             }
 
-            await AnalysisCache.create({
-
-                company: companyName,
-
-                analysis: result.analysis,
-                profile: result.profile,
-                quote: result.quote,
-                news: result.news,
-                chart: result.chart
-
-            });
+           await AnalysisCache.findOneAndUpdate(
+    { company: companyName },
+    {
+        company: companyName,
+        analysis: result.analysis,
+        profile: result.profile,
+        quote: result.quote,
+        news: result.news,
+        chart: result.chart,
+        updatedAt: new Date()
+    },
+    {
+        upsert: true,
+        new: true
+    }
+);
 
         }
 
