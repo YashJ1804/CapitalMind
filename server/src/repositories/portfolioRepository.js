@@ -15,6 +15,9 @@ class PortfolioRepository {
     async save(portfolio) {
         return portfolio.save();
     }
+    async updateHolding(portfolio) {
+    return portfolio.save();
+}
 
     async deleteHolding(portfolio, holdingId) {
         portfolio.holdings = portfolio.holdings.filter(

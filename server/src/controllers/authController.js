@@ -1,253 +1,55 @@
-const User = require("../models/User");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const authService = require("../services/authService");
+const ApiResponse = require("../utils/apiResponse");
 
-const register = async (req, res) => {
+class AuthController {
+    async register(req, res, next) {
+        try {
+            await authService.register(req.body);
 
-    try {
-
-        const { name, email, password } = req.body;
-
-        if (!name || !email || !password) {
-
-            return res.status(400).json({
-
-                success: false,
-                message: "All fields are required"
-
-            });
-
+            return ApiResponse.success(
+                res,
+                null,
+                "User registered successfully",
+                201
+            );
+        } catch (error) {
+            next(error);
         }
-
-        const existingUser = await User.findOne({ email });
-
-        if (existingUser) {
-
-            return res.status(400).json({
-
-                success: false,
-                message: "Email already registered"
-
-            });
-
-        }
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        const user = await User.create({
-
-            name,
-            email,
-            password: hashedPassword
-
-        });
-
-        res.status(201).json({
-
-            success: true,
-            message: "User registered successfully"
-
-        });
-
-    } catch (error) {
-
-        res.status(500).json({
-
-            success: false,
-            message: error.message
-
-        });
-
     }
 
-};
+    async login(req, res, next) {
+        try {
+            const data = await authService.login(req.body);
 
-const login = async (req, res) => {
-
-    try {
-
-        const { email, password } = req.body;
-
-        if (!email || !password) {
-
-            return res.status(400).json({
-
-                success: false,
-                message: "Email and Password are required"
-
-            });
-
+            return ApiResponse.success(
+                res,
+                data,
+                "Login successful"
+            );
+        } catch (error) {
+            next(error);
         }
-
-        const user = await User.findOne({ email });
-
-        if (!user) {
-
-            return res.status(400).json({
-
-                success: false,
-                message: "Invalid Email"
-
-            });
-
-        }
-
-        const isMatch = await bcrypt.compare(password, user.password);
-
-        if (!isMatch) {
-
-            return res.status(400).json({
-
-                success: false,
-                message: "Invalid Password"
-
-            });
-
-        }
-        const token = jwt.sign(
-
-            {
-
-                id: user._id,
-
-                email: user.email
-
-            },
-
-            process.env.JWT_SECRET,
-
-            {
-
-                expiresIn: "7d"
-
-            }
-
-        );
-
-        res.status(200).json({
-
-            success: true,
-
-            message: "Login Successful",
-
-            token,
-
-            user: {
-
-                id: user._id,
-
-                name: user.name,
-
-                email: user.email
-
-            }
-
-        });
-
     }
 
-    catch (error) {
+    async changePassword(req, res, next) {
+        try {
+            const { currentPassword, newPassword } = req.body;
 
-        res.status(500).json({
+            await authService.changePassword(
+                req.user.id,
+                currentPassword,
+                newPassword
+            );
 
-            success: false,
-
-            message: error.message
-
-        });
-
-    }
-
-};
-
-const changePassword = async (req, res) => {
-
-    try {
-
-        const { currentPassword, newPassword } = req.body;
-
-        if (!currentPassword || !newPassword) {
-
-            return res.status(400).json({
-
-                success: false,
-
-                message: "Both passwords are required."
-
-            });
-
+            return ApiResponse.success(
+                res,
+                null,
+                "Password changed successfully"
+            );
+        } catch (error) {
+            next(error);
         }
-
-        const user = await User.findById(req.user.id);
-
-        if (!user) {
-
-            return res.status(404).json({
-
-                success: false,
-
-                message: "User not found."
-
-            });
-
-        }
-
-        const isMatch = await bcrypt.compare(
-
-            currentPassword,
-
-            user.password
-
-        );
-
-        if (!isMatch) {
-
-            return res.status(400).json({
-
-                success: false,
-
-                message: "Current password is incorrect."
-
-            });
-
-        }
-
-        user.password = await bcrypt.hash(
-
-            newPassword,
-
-            10
-
-        );
-
-        await user.save();
-
-        return res.json({
-
-            success: true,
-
-            message: "Password changed successfully."
-
-        });
-
     }
+}
 
-    catch (error) {
-
-        return res.status(500).json({
-
-            success: false,
-
-            message: error.message
-
-        });
-
-    }
-
-};
-
-module.exports = {
-    register,
-    login,
-    changePassword
-};
+module.exports = new AuthController();

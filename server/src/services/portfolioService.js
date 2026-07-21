@@ -32,6 +32,41 @@ class PortfolioService {
 
         return portfolioRepository.save(portfolio);
     }
+    async updateHolding(userId, holdingId, holdingData) {
+    const portfolio = await this.getPortfolio(userId);
+
+    const holding = portfolio.holdings.id(holdingId);
+
+    if (!holding) {
+        throw new ApiError(
+            HTTP_STATUS.NOT_FOUND,
+            "Holding not found",
+            "HOLDING_NOT_FOUND"
+        );
+    }
+
+    if (holdingData.quantity !== undefined) {
+        holding.quantity = holdingData.quantity;
+    }
+
+    if (holdingData.averagePrice !== undefined) {
+        holding.averagePrice = holdingData.averagePrice;
+    }
+
+    if (holdingData.purchaseDate !== undefined) {
+        holding.purchaseDate = holdingData.purchaseDate;
+    }
+
+    if (holdingData.sector !== undefined) {
+        holding.sector = holdingData.sector;
+    }
+
+    if (holdingData.industry !== undefined) {
+        holding.industry = holdingData.industry;
+    }
+
+    return portfolioRepository.updateHolding(portfolio);
+}
 
     async removeHolding(userId, holdingId) {
         const portfolio = await this.getPortfolio(userId);

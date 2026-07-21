@@ -10,6 +10,7 @@ const historyRoutes = require("./routes/historyRoutes");
 const watchlistRoutes = require("./routes/watchlistRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
 const marketRoutes = require("./routes/marketRoutes");
+const portfolioRoutes = require("./routes/portfolioRoutes");
 
 const app = express();
 
@@ -59,7 +60,7 @@ app.use("/api/history", historyRoutes);
 app.use("/api/watchlist", watchlistRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/market", marketRoutes);
-
+app.use("/api/portfolio", portfolioRoutes);
 // Error Handler
 app.use(errorHandler);
 
