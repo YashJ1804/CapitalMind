@@ -1,35 +1,44 @@
 const mongoose = require("mongoose");
 
+const watchlistItemSchema = new mongoose.Schema(
+    {
+        symbol: {
+            type: String,
+            required: true,
+            uppercase: true,
+            trim: true,
+        },
+        companyName: {
+            type: String,
+            required: true,
+        },
+        exchange: {
+            type: String,
+            default: "",
+        },
+        addedAt: {
+            type: Date,
+            default: Date.now,
+        },
+    },
+    {
+        _id: true,
+    }
+);
+
 const watchlistSchema = new mongoose.Schema(
     {
         user: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
             required: true,
+            unique: true,
         },
 
-        symbol: {
-            type: String,
-            required: true,
-        },
-
-        company: {
-            type: String,
-            required: true,
-        },
+        stocks: [watchlistItemSchema],
     },
     {
         timestamps: true,
-    }
-);
-
-watchlistSchema.index(
-    {
-        user: 1,
-        symbol: 1,
-    },
-    {
-        unique: true,
     }
 );
 

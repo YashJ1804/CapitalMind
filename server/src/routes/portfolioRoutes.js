@@ -10,6 +10,12 @@ router.get("/", portfolioController.getPortfolio);
 
 router.post("/", portfolioController.addHolding);
 
+router.get(
+    "/summary",
+    authMiddleware,
+    portfolioController.getPortfolioSummary
+);
+
 router.put("/:holdingId", portfolioController.updateHolding);
 
 router.delete("/:holdingId", portfolioController.removeHolding);

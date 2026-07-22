@@ -1,97 +1,71 @@
-const Watchlist = require("../models/Watchlist");
+const watchlistService = require("../services/watchlistService");
+const ApiResponse = require("../utils/apiResponse");
 
-const addToWatchlist = async (req, res) => {
+class WatchlistController {
 
-    try {
+    async getWatchlist(req, res, next) {
+        try {
+            const watchlist = await watchlistService.getWatchlist(req.user.id);
 
-        const { symbol, company } = req.body;
-
-        const exists = await Watchlist.findOne({
-            user: req.user.id,
-            symbol,
-        });
-
-        if (exists) {
-
-            return res.status(400).json({
-                success: false,
-                message: "Already in watchlist",
-            });
-
+            return ApiResponse.success(
+                res,
+                watchlist,
+                "Watchlist fetched successfully"
+            );
+        } catch (error) {
+            next(error);
         }
-
-        const item = await Watchlist.create({
-            user: req.user.id,
-            symbol,
-            company,
-        });
-
-        res.status(201).json({
-            success: true,
-            data: item,
-        });
-
-    } catch (error) {
-
-        res.status(500).json({
-            success: false,
-            message: error.message,
-        });
-
     }
 
-};
+    async addStock(req, res, next) {
+        try {
+            const watchlist = await watchlistService.addStock(
+                req.user.id,
+                req.body
+            );
 
-const getWatchlist = async (req, res) => {
+            return ApiResponse.success(
+                res,
+                watchlist,
+                "Stock added to watchlist successfully"
+            );
+        } catch (error) {
+            next(error);
+        }
+    }
 
+    async removeStock(req, res, next) {
+        try {
+            const watchlist = await watchlistService.removeStock(
+                req.user.id,
+                req.params.stockId
+            );
+
+            return ApiResponse.success(
+                res,
+                watchlist,
+                "Stock removed from watchlist successfully"
+            );
+        } catch (error) {
+            next(error);
+        }
+    }
+    async getWatchlistSummary(req, res, next) {
     try {
+        const summary = await watchlistService.getWatchlistSummary(
+            req.user.id
+        );
 
-        const items = await Watchlist.find({
-            user: req.user.id,
-        }).sort({
-            createdAt: -1,
-        });
-
-        res.json({
-            success: true,
-            data: items,
-        });
-
+        return ApiResponse.success(
+            res,
+            summary,
+            "Watchlist summary fetched successfully"
+        );
     } catch (error) {
-
-        res.status(500).json({
-            success: false,
-            message: error.message,
-        });
-
+        next(error);
     }
+}
 
-};
+}
 
-const removeFromWatchlist = async (req, res) => {
-
-    try {
-
-        await Watchlist.findByIdAndDelete(req.params.id);
-
-        res.json({
-            success: true,
-            message: "Removed from watchlist",
-        });
-
-    } catch (error) {
-
-        res.status(500).json({
-            success: false,
-            message: error.message,
-        });
-
-    }
-
-};
-
-module.exports = {
-    addToWatchlist,
-    getWatchlist,
-    removeFromWatchlist,
-};
+module.exports = new WatchlistController();

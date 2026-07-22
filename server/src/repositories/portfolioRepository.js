@@ -4,6 +4,9 @@ class PortfolioRepository {
     async findByUser(userId) {
         return Portfolio.findOne({ user: userId });
     }
+    async findByUserWithHoldings(userId) {
+        return Portfolio.findOne({ user: userId }).lean();
+    }
 
     async create(userId) {
         return Portfolio.create({
@@ -18,7 +21,6 @@ class PortfolioRepository {
     async updateHolding(portfolio) {
     return portfolio.save();
 }
-
     async deleteHolding(portfolio, holdingId) {
         portfolio.holdings = portfolio.holdings.filter(
             (holding) => holding._id.toString() !== holdingId

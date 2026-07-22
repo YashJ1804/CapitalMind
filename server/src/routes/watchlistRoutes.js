@@ -2,18 +2,31 @@ const express = require("express");
 
 const router = express.Router();
 
+const watchlistController = require("../controllers/watchlistController");
 const authMiddleware = require("../middlewares/authMiddleware");
 
-const {
-    addToWatchlist,
-    getWatchlist,
-    removeFromWatchlist,
-} = require("../controllers/watchlistController");
+router.get(
+    "/",
+    authMiddleware,
+    watchlistController.getWatchlist
+);
 
-router.get("/", authMiddleware, getWatchlist);
+router.post(
+    "/",
+    authMiddleware,
+    watchlistController.addStock
+);
+router.get(
+    "/summary",
+    authMiddleware,
+    watchlistController.getWatchlistSummary
+);
 
-router.post("/", authMiddleware, addToWatchlist);
+router.delete(
+    "/:stockId",
+    authMiddleware,
+    watchlistController.removeStock
+);
 
-router.delete("/:id", authMiddleware, removeFromWatchlist);
 
 module.exports = router;

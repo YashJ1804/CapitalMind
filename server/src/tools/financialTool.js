@@ -1,8 +1,8 @@
-const axios = require("axios");
+const httpClient = require("../services/httpClient");
 
 const getQuote = async (symbol) => {
 
-    const { data } = await axios.get(
+    const { data } = await httpClient.get(
 
         "https://finnhub.io/api/v1/quote",
 

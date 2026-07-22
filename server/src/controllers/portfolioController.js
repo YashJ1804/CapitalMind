@@ -15,14 +15,14 @@ class PortfolioController {
             next(error);
         }
     }
-
+    
     async addHolding(req, res, next) {
         try {
             const portfolio = await portfolioService.addHolding(
                 req.user.id,
                 req.body
             );
-
+            
             return ApiResponse.success(
                 res,
                 portfolio,
@@ -34,30 +34,30 @@ class PortfolioController {
         }
     }
     async updateHolding(req, res, next) {
-    try {
-        const portfolio = await portfolioService.updateHolding(
-            req.user.id,
-            req.params.holdingId,
-            req.body
-        );
-
-        return ApiResponse.success(
-            res,
-            portfolio,
-            "Holding updated successfully"
-        );
-    } catch (error) {
-        next(error);
+        try {
+            const portfolio = await portfolioService.updateHolding(
+                req.user.id,
+                req.params.holdingId,
+                req.body
+            );
+            
+            return ApiResponse.success(
+                res,
+                portfolio,
+                "Holding updated successfully"
+            );
+        } catch (error) {
+            next(error);
+        }
     }
-}
-
+    
     async removeHolding(req, res, next) {
         try {
             const portfolio = await portfolioService.removeHolding(
                 req.user.id,
                 req.params.holdingId
             );
-
+            
             return ApiResponse.success(
                 res,
                 portfolio,
@@ -66,6 +66,19 @@ class PortfolioController {
         } catch (error) {
             next(error);
         }
+    }
+    async getPortfolioSummary(req, res, next) {
+    try {
+        const summary = await portfolioService.getPortfolioSummary(req.user.id);
+    
+        return ApiResponse.success(
+            res,
+            summary,
+            "Portfolio summary fetched successfully"
+        );
+    } catch (error) {
+        next(error);
+    }
     }
 }
 
