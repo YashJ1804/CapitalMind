@@ -1,31 +1,64 @@
-const { z } = require("zod");
+const { body } = require("express-validator");
 
-const registerSchema = z.object({
-    name: z
-        .string()
-        .min(2, "Name must be at least 2 characters")
-        .max(50),
+const registerValidator = [
+    body("name")
+        .trim()
+        .notEmpty()
+        .withMessage("Name is required.")
+        .isLength({ min: 2, max: 50 })
+        .withMessage("Name must be between 2 and 50 characters."),
 
-    email: z
-        .string()
-        .email("Invalid email address"),
+    body("email")
+        .trim()
+        .notEmpty()
+        .withMessage("Email is required.")
+        .isEmail()
+        .withMessage("Please enter a valid email address.")
+        .normalizeEmail(),
 
-    password: z
-        .string()
-        .min(6, "Password must be at least 6 characters")
-});
+    body("password")
+        .notEmpty()
+        .withMessage("Password is required.")
+        .isLength({ min: 8, max: 100 })
+        .withMessage("Password must be between 8 and 100 characters.")
+        .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/)
+        .withMessage(
+            "Password must contain at least one uppercase letter, one lowercase letter, and one number."
+        )
+];
 
-const loginSchema = z.object({
-    email: z
-        .string()
-        .email("Invalid email address"),
+const loginValidator = [
+    body("email")
+        .trim()
+        .notEmpty()
+        .withMessage("Email is required.")
+        .isEmail()
+        .withMessage("Please enter a valid email address.")
+        .normalizeEmail(),
 
-    password: z
-        .string()
-        .min(6)
-});
+    body("password")
+        .notEmpty()
+        .withMessage("Password is required.")
+];
+
+const changePasswordValidator = [
+    body("currentPassword")
+        .notEmpty()
+        .withMessage("Current password is required."),
+
+    body("newPassword")
+        .notEmpty()
+        .withMessage("New password is required.")
+        .isLength({ min: 8, max: 100 })
+        .withMessage("New password must be between 8 and 100 characters.")
+        .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/)
+        .withMessage(
+            "New password must contain at least one uppercase letter, one lowercase letter, and one number."
+        )
+];
 
 module.exports = {
-    registerSchema,
-    loginSchema
+    registerValidator,
+    loginValidator,
+    changePasswordValidator
 };

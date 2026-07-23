@@ -1,59 +1,115 @@
-const { searchCompany } = require("../tools/searchTool");
-const { getCompanyProfile } = require("../tools/companyTool");
-const { getQuote } = require("../tools/financialTool");
-const { getCompanyNews } = require("../tools/newsTool");
-
-const {
-    makeInvestmentDecision
-} = require("../agents/decisionAgent");
+const ApiError = require("../utils/apiError");
+const HTTP_STATUS = require("../constants/httpStatus");
 
 const analyzeStock = async (
     company,
     risk = "Moderate"
 ) => {
 
-    const stock = await searchCompany(company);
+    try {
 
-    const [
-        profile,
-        quote,
-        news
-    ] = await Promise.all([
+        const cacheKey = `${company.trim().toUpperCase()}-${risk}`;
 
-        getCompanyProfile(stock.symbol),
+        // Check cache first
+        const cachedData = cacheService.get(cacheKey);
 
-        getQuote(stock.symbol),
+        if (cachedData) {
+            console.log(`⚡ Cache Hit: ${cacheKey}`);
+            return cachedData;
+        }
 
-        getCompanyNews(stock.symbol)
+        // Search company
+        const stock = await searchCompany(company);
 
-    ]);
+        if (!stock || !stock.symbol) {
+            throw new ApiError(
+                HTTP_STATUS.NOT_FOUND,
+                "Company not found.",
+                "COMPANY_NOT_FOUND"
+            );
+        }
 
-    const analysis =
-        await makeInvestmentDecision(
+        // Fetch data in parallel
+        const [
+            profile,
+            quote,
+            news
+        ] = await Promise.all([
+
+            getCompanyProfile(stock.symbol),
+
+            getQuote(stock.symbol),
+
+            getCompanyNews(stock.symbol)
+
+        ]);
+
+        // AI Analysis
+        const analysis = await makeInvestmentDecision(
             profile,
             quote,
             news,
             risk
         );
 
-    return {
+        // Final response
+        const response = {
 
-        symbol: stock.symbol,
+            stock: {
+                symbol: stock.symbol,
+                profile,
+                quote
+            },
 
-        profile,
+            news,
 
-        quote,
+            analysis
 
-        news,
+        };
 
-        analysis
+        // Store in cache
+        cacheService.set(cacheKey, response);
 
-    };
+        return response;
 
-};
+    } catch (error) {
 
-module.exports = {
+        console.error({
+            service: "AI Service",
+            company,
+            risk,
+            message: error.message
+        });
 
-    analyzeStock
+        // Already a handled API error
+        if (error instanceof ApiError) {
+            throw error;
+        }
+
+        // Axios/Finnhub timeout
+        if (error.code === "ECONNABORTED") {
+            throw new ApiError(
+                HTTP_STATUS.SERVICE_UNAVAILABLE,
+                "Market data request timed out.",
+                "MARKET_API_TIMEOUT"
+            );
+        }
+
+        // External API failure
+        if (error.response) {
+            throw new ApiError(
+                HTTP_STATUS.SERVICE_UNAVAILABLE,
+                "Market data provider is unavailable.",
+                "MARKET_API_ERROR"
+            );
+        }
+
+        // Unknown server error
+        throw new ApiError(
+            HTTP_STATUS.INTERNAL_SERVER_ERROR,
+            "Failed to analyze stock.",
+            "AI_ANALYSIS_FAILED"
+        );
+    }
 
 };
