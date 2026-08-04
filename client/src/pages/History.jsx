@@ -1,11 +1,16 @@
 import { useEffect, useState } from "react";
-import Navbar from "../components/Navbar/Navbar";
+
 import api from "../services/api";
+
+import AppLayout from "../layouts/AppLayout";
+
+import EmptyHistory from "../components/history/EmptyHistory/EmptyHistory";
+import HistoryList from "../components/history/HistoryList/HistoryList";
+import HistorySkeleton from "../components/history/HistorySkeleton/HistorySkeleton";
 
 function History() {
 
     const [history, setHistory] = useState([]);
-
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -20,7 +25,7 @@ function History() {
 
             } catch (error) {
 
-                console.error(error);
+                console.error("Failed to fetch history:", error);
 
             } finally {
 
@@ -36,117 +41,43 @@ function History() {
 
     return (
 
-        <>
-            <Navbar />
+        <AppLayout>
 
-            <div className="min-h-screen bg-slate-950 text-white px-8 py-10">
+            <div className="space-y-8">
 
-                <h1 className="text-4xl font-bold mb-10">
+                <div>
 
-                    📜 Analysis History
+                    <h1 className="text-4xl font-black text-white">
 
-                </h1>
+                        📜 Analysis History
 
-                {loading && (
+                    </h1>
 
-                    <p>Loading...</p>
+                    <p className="text-slate-400 mt-2">
 
-                )}
+                        Review all of your previous AI investment analyses.
 
-                {!loading && history.length === 0 && (
-
-                    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-12 text-center">
-
-    <div className="text-6xl mb-4">
-
-        📜
-
-    </div>
-
-    <h2 className="text-3xl font-bold">
-
-        No Analysis Yet
-
-    </h2>
-
-    <p className="text-slate-400 mt-3">
-
-        Start analyzing companies to build your investment history.
-
-    </p>
-
-</div>
-
-                )}
-
-                <div className="grid gap-6">
-
-                    {history.map((item) => (
-
-                        <div
-
-                            key={item._id}
-
-                            className="bg-slate-900 border border-slate-800 rounded-xl p-6"
-
-                        >
-
-                            <div className="flex justify-between">
-
-                                <div>
-
-                                    <h2 className="text-2xl font-bold">
-
-                                        {item.company}
-
-                                    </h2>
-
-                                    <p className="text-slate-400 mt-2">
-
-                                        {item.summary}
-
-                                    </p>
-
-                                </div>
-
-                                <div className="text-right">
-
-                                    <h3 className="text-3xl font-bold text-green-400">
-
-                                        {item.recommendation}
-
-                                    </h3>
-
-                                    <p>
-
-                                        Score : {item.score}
-                                    </p>
-
-                                    <p>
-
-                                        Confidence : {item.confidence}%
-
-                                    </p>
-
-                                </div>
-
-                            </div>
-
-                            <p className="text-slate-500 mt-5">
-
-                                {new Date(item.createdAt).toLocaleString()}
-
-                            </p>
-
-                        </div>
-
-                    ))}
+                    </p>
 
                 </div>
 
+                {loading ? (
+
+                    <HistorySkeleton />
+
+                ) : history.length === 0 ? (
+
+                    <EmptyHistory />
+
+                ) : (
+
+                    <HistoryList history={history} />
+
+                )}
+
             </div>
 
-        </>
+        </AppLayout>
 
     );
 

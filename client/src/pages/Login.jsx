@@ -37,11 +37,11 @@ function Login() {
             const response = await api.post("/auth/login", form);
 
             login(
-                response.data.user,
-                response.data.token
-            );
+    response.data.data.user,
+    response.data.data.token
+);
 
-            navigate("/");
+navigate("/dashboard");
 
         } catch (err) {
 

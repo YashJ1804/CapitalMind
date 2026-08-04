@@ -41,11 +41,13 @@ function Register() {
 
         } catch (err) {
 
-            setError(
-                err.response?.data?.message || "Registration Failed"
-            );
+    console.log(JSON.stringify(err.response?.data, null, 2));
 
-        } finally {
+    setError(
+        err.response?.data?.message || "Registration Failed"
+    );
+
+} finally {
 
             setLoading(false);
 

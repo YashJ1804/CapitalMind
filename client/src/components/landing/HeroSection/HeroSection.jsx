@@ -1,4 +1,4 @@
-import SearchBar from "../SearchBar/SearchBar";
+import SearchBar from "../../market/SearchBar/SearchBar";
 
 function HeroSection({
     company,

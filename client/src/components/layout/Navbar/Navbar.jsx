@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
-import ChangePasswordModal from "../ChangePasswordModal/ChangePasswordModal";
+import { useAuth } from "../../../context/AuthContext";
+import ChangePasswordModal from "../../ChangePasswordModal/ChangePasswordModal";
 import {
     FaBars,
     FaTimes,
@@ -149,6 +149,23 @@ duration-300
                             >
                                 Watchlist
                             </NavLink>
+                            <NavLink
+    to="/portfolio"
+    className={({ isActive }) =>
+        isActive ? activeNav : navLink
+    }
+>
+    Portfolio
+</NavLink>
+
+<NavLink
+    to="/profile"
+    className={({ isActive }) =>
+        isActive ? activeNav : navLink
+    }
+>
+    Profile
+</NavLink>
 
                         </>
 
@@ -315,6 +332,49 @@ transition
                                         History
 
                                     </Link>
+                                    <Link
+    to="/portfolio"
+    onClick={() => setOpen(false)}
+    className="
+flex
+items-center
+gap-3
+px-5
+py-4
+text-white
+hover:bg-slate-800
+hover:text-cyan-400
+transition
+"
+>
+
+    <FaChartLine />
+
+    Portfolio
+
+</Link>
+
+<Link
+    to="/profile"
+    onClick={() => setOpen(false)}
+    className="
+flex
+items-center
+gap-3
+px-5
+py-4
+text-white
+hover:bg-slate-800
+hover:text-cyan-400
+transition
+"
+>
+
+    <FaUserCircle />
+
+    Profile
+
+</Link>
 
                                                         <button
 
@@ -635,6 +695,83 @@ isActive
                                         Watchlist
 
                                     </NavLink>
+                                    <NavLink
+    to="/portfolio"
+    onClick={() => setMobileMenu(false)}
+    className={({ isActive }) =>
+
+        `
+flex
+items-center
+gap-3
+px-6
+py-4
+font-medium
+transition-all
+
+${
+
+isActive
+
+?
+
+"bg-blue-600/20 text-cyan-400"
+
+:
+
+"text-white hover:bg-slate-800 hover:text-cyan-400"
+
+}
+
+`
+
+    }
+>
+
+    <FaChartLine />
+
+    Portfolio
+
+</NavLink>
+
+<NavLink
+    to="/profile"
+    onClick={() => setMobileMenu(false)}
+    className={({ isActive }) =>
+
+        `
+flex
+items-center
+gap-3
+px-6
+py-4
+font-medium
+transition-all
+
+${
+
+isActive
+
+?
+
+"bg-blue-600/20 text-cyan-400"
+
+:
+
+"text-white hover:bg-slate-800 hover:text-cyan-400"
+
+}
+
+`
+
+    }
+>
+
+    <FaUserCircle />
+
+    Profile
+
+</NavLink>
 
                                     <button
 

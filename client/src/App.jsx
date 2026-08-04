@@ -1,88 +1,126 @@
 import {
-    BrowserRouter,
-    Routes,
-    Route,
-    Navigate
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
 } from "react-router-dom";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+
+import Dashboard from "./pages/Dashboard";
 import History from "./pages/History";
 import Watchlist from "./pages/Watchlist";
-import Dashboard from "./pages/Dashboard";
+
+import Portfolio from "./pages/Portfolio";
+import Market from "./pages/Market";
+import Analyze from "./pages/Analyze";
+import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
 
 import { useAuth } from "./context/AuthContext";
 
 function ProtectedRoute({ children }) {
+  const { isAuthenticated } = useAuth();
 
-    const { isAuthenticated } = useAuth();
-
-    return isAuthenticated
-        ? children
-        : <Navigate to="/login" replace />;
+  return isAuthenticated ? children : <Navigate to="/login" replace />;
 }
 
 function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
 
-    return (
+        {/* ================= PUBLIC ROUTES ================= */}
 
-        <BrowserRouter>
+        <Route path="/" element={<Home />} />
 
-            <Routes>
+        <Route path="/login" element={<Login />} />
 
-                {/* PUBLIC */}
+        <Route path="/register" element={<Register />} />
 
-                <Route
-                    path="/"
-                    element={<Home />}
-                />
+        {/* ================= PROTECTED ROUTES ================= */}
 
-                <Route
-                    path="/login"
-                    element={<Login />}
-                />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
 
-                <Route
-                    path="/register"
-                    element={<Register />}
-                />
+        <Route
+          path="/history"
+          element={
+            <ProtectedRoute>
+              <History />
+            </ProtectedRoute>
+          }
+        />
 
-                {/* PROTECTED */}
+        <Route
+          path="/watchlist"
+          element={
+            <ProtectedRoute>
+              <Watchlist />
+            </ProtectedRoute>
+          }
+        />
 
-                <Route
-                    path="/dashboard"
-                    element={
-                        <ProtectedRoute>
-                            <Dashboard />
-                        </ProtectedRoute>
-                    }
-                />
+        <Route
+          path="/portfolio"
+          element={
+            <ProtectedRoute>
+              <Portfolio />
+            </ProtectedRoute>
+          }
+        />
 
-                <Route
-                    path="/history"
-                    element={
-                        <ProtectedRoute>
-                            <History />
-                        </ProtectedRoute>
-                    }
-                />
+        <Route
+          path="/market"
+          element={
+            <ProtectedRoute>
+              <Market />
+            </ProtectedRoute>
+          }
+        />
 
-                <Route
-                    path="/watchlist"
-                    element={
-                        <ProtectedRoute>
-                            <Watchlist />
-                        </ProtectedRoute>
-                    }
-                />
+        <Route
+          path="/analyze"
+          element={
+            <ProtectedRoute>
+              <Analyze />
+            </ProtectedRoute>
+          }
+        />
 
-            </Routes>
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
 
-        </BrowserRouter>
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <Settings />
+            </ProtectedRoute>
+          }
+        />
 
-    );
+        {/* ================= 404 ================= */}
 
+        <Route path="*" element={<Navigate to="/" replace />} />
+
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;

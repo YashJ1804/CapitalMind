@@ -3,23 +3,23 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import toast from "react-hot-toast";
 
-import Navbar from "../components/Navbar/Navbar";
-import HeroSection from "../components/HeroSection/HeroSection";
-import StatsSection from "../components/StatsSection/StatsSection";
-import FeaturesSection from "../components/FeaturesSection/FeaturesSection";
-import HowItWorks from "../components/HowItWorks/HowItWorks";
-import MarketSnapshot from "../components/MarketSnapshot/MarketSnapshot";
+import Navbar from "../components/layout/Navbar/Navbar";
+import HeroSection from "../components/landing/HeroSection/HeroSection";
+import StatsSection from "../components/landing/StatsSection/StatsSection";
+import FeaturesSection from "../components/landing/FeaturesSection/FeaturesSection";
+import HowItWorks from "../components/landing/HowItWorks/HowItWorks";
+import MarketSnapshot from "../components/market/MarketSnapshot/MarketSnapshot";
 
-import RecommendationCard from "../components/RecommendationCard/RecommendationCard";
-import AIInsights from "../components/AIInsights/AIInsights";
-import MarketOverview from "../components/MarketOverview/MarketOverview";
-import StockChart from "../components/StockChart/StockChart";
-import NewsSection from "../components/NewsSection/NewsSection";
-import Summary from "../components/Summary/Summary";
-import ProsCons from "../components/ProsCons/ProsCons";
-import Risks from "../components/Risks/Risks";
-import FutureOutlook from "../components/FutureOutlook/FutureOutlook";
-import Reasoning from "../components/Reasoning/Reasoning";
+import RecommendationCard from "../components/ai/RecommendationCard/RecommendationCard";
+import AIInsights from "../components/ai/AIInsights/AIInsights";
+import MarketOverview from "../components/market/MarketOverview/MarketOverview";
+import StockChart from "../components/market/StockChart/StockChart";
+import NewsSection from "../components/market/NewsSection/NewsSection";
+import Summary from "../components/ai/Summary/Summary";
+import ProsCons from "../components/ai/ProsCons/ProsCons";
+import Risks from "../components/ai/Risks/Risks";
+import FutureOutlook from "../components/ai/FutureOutlook/FutureOutlook";
+import Reasoning from "../components/ai/Reasoning/Reasoning";
 
 import api from "../services/api";
 
