@@ -66,6 +66,11 @@ class AuthService {
                 id: user._id,
                 name: user.name,
                 email: user.email,
+                settings: user.settings || {
+                    defaultMarket: "INDIA",
+                    notifications: true,
+                    emailNotifications: false,
+                },
             },
         };
     }
@@ -81,7 +86,10 @@ class AuthService {
             );
         }
 
-        const isMatch = await bcrypt.compare(currentPassword, user.password);
+        const isMatch = await bcrypt.compare(
+            currentPassword,
+            user.password
+        );
 
         if (!isMatch) {
             throw new ApiError(
@@ -96,6 +104,29 @@ class AuthService {
         await authRepository.save(user);
 
         return null;
+    }
+
+    async updateSettings(userId, settings) {
+        const user = await authRepository.findById(userId);
+
+        if (!user) {
+            throw new ApiError(
+                HTTP_STATUS.NOT_FOUND,
+                "User not found",
+                "USER_NOT_FOUND"
+            );
+        }
+
+        user.settings = {
+            ...(user.settings?.toObject?.() || user.settings || {}),
+            ...settings,
+        };
+
+        await authRepository.save(user);
+
+        return {
+            settings: user.settings,
+        };
     }
 }
 

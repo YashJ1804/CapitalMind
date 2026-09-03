@@ -57,8 +57,26 @@ const changePasswordValidator = [
         )
 ];
 
+const settingsValidator = [
+    body("defaultMarket")
+        .optional()
+        .isIn(["INDIA", "USA"])
+        .withMessage("Default market must be either INDIA or USA."),
+
+    body("notifications")
+        .optional()
+        .isBoolean()
+        .withMessage("Notifications must be a boolean value."),
+
+    body("emailNotifications")
+        .optional()
+        .isBoolean()
+        .withMessage("Email notifications must be a boolean value.")
+];
+
 module.exports = {
     registerValidator,
     loginValidator,
-    changePasswordValidator
+    changePasswordValidator,
+    settingsValidator
 };

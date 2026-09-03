@@ -50,6 +50,23 @@ class AuthController {
             next(error);
         }
     }
+
+    async updateSettings(req, res, next) {
+        try {
+            const settings = await authService.updateSettings(
+                req.user.id,
+                req.body
+            );
+
+            return ApiResponse.success(
+                res,
+                settings,
+                "Settings updated successfully"
+            );
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 module.exports = new AuthController();

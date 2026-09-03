@@ -33,10 +33,14 @@ const generateContent = async (prompt) => {
         const status = error.status || error.error?.code;
 
         if (
-            status === 429 ||
-            status === 401 ||
-            status === 403
-        ) {
+    status === 429 ||
+    status === 401 ||
+    status === 403 ||
+    status === 500 ||
+    status === 502 ||
+    status === 503 ||
+    status === 504
+) {
 
             console.log("🟡 Primary Key Failed");
             console.log("🔄 Switching to Backup Gemini Key...");

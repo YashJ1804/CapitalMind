@@ -1,5 +1,10 @@
 const AnalysisHistory = require("../models/AnalysisHistory");
 
+
+// ==========================================
+// GET ALL HISTORY
+// ==========================================
+
 const getHistory = async (req, res) => {
 
     try {
@@ -22,9 +27,7 @@ const getHistory = async (req, res) => {
 
         });
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         res.status(500).json({
 
@@ -38,8 +41,67 @@ const getHistory = async (req, res) => {
 
 };
 
+
+// ==========================================
+// GET SINGLE HISTORY ITEM
+// ==========================================
+
+const getHistoryById = async (req, res) => {
+
+    try {
+
+        const history = await AnalysisHistory.findOne({
+
+            _id: req.params.id,
+
+            user: req.user.id
+
+        });
+
+        if (!history) {
+
+            return res.status(404).json({
+
+                success: false,
+
+                message: "Analysis history not found."
+
+            });
+
+        }
+
+        return res.status(200).json({
+
+            success: true,
+
+            data: history
+
+        });
+
+    } catch (error) {
+
+        console.error(
+            "Failed to fetch historical analysis:",
+            error
+        );
+
+        return res.status(500).json({
+
+            success: false,
+
+            message: error.message
+
+        });
+
+    }
+
+};
+
+
 module.exports = {
 
-    getHistory
+    getHistory,
+
+    getHistoryById
 
 };

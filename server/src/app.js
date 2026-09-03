@@ -14,10 +14,18 @@ const dashboardRoutes = require("./routes/dashboardRoutes");
 const marketRoutes = require("./routes/marketRoutes");
 const portfolioRoutes = require("./routes/portfolioRoutes");
 const portfolioAIRoutes = require("./routes/portfolioAIRoutes");
+const notificationRoutes =
+    require("./routes/notificationRoutes");
+const indianCompanyRoutes =
+    require("./routes/indianCompanyRoutes");
+const usMarketRoutes =
+    require("./routes/usMarketRoutes");
 const helmet = require("helmet");
+const currencyRoutes = require("./routes/currencyRoutes");
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./config/swagger");
 const compression = require("compression");
+const indianMarketRoutes = require("./routes/indianMarketRoutes");
 const app = express();
 
 // CORS Configuration
@@ -65,6 +73,10 @@ app.use(
     swaggerUi.setup(swaggerSpec)
 
 );
+app.use(
+    "/api/notifications",
+    notificationRoutes
+);
 
 app.use(logger);
 
@@ -79,6 +91,19 @@ app.use("/api/market", marketRoutes);
 app.use("/api/portfolio", portfolioRoutes);
 app.use("/api/watchlist", watchlistRoutes);
 app.use("/api/portfolio", portfolioAIRoutes);
+app.use("/api/currency", currencyRoutes);
+app.use(
+    "/api/market",
+    indianMarketRoutes
+);
+app.use(
+    "/api/market",
+    usMarketRoutes
+);
+app.use(
+    "/api/indian-company",
+    indianCompanyRoutes
+);
 app.use(morgan("dev"));
 app.use(helmet());
 app.use("/api/health", healthRoutes);

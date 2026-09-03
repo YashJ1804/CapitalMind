@@ -15,13 +15,13 @@ function EmptyPortfolio() {
 
                 <p className="mt-4 max-w-2xl text-lg leading-8 text-slate-400">
 
-                    You haven't added any investments yet.
+    You haven't added any investments yet.
 
-                    Once portfolio management is available,
-                    your holdings, returns and allocation will
-                    automatically appear here.
+    Add your first investment to start tracking
+    holdings, returns, allocation, and AI-powered
+    portfolio insights.
 
-                </p>
+</p>
 
                 <div className="mt-10 rounded-2xl border border-slate-800 bg-slate-950 px-8 py-5">
 

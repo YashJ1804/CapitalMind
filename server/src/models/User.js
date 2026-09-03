@@ -21,6 +21,24 @@ const userSchema = new mongoose.Schema(
             required: true,
             minlength: 6,
         },
+
+        settings: {
+            defaultMarket: {
+                type: String,
+                enum: ["INDIA", "USA"],
+                default: "INDIA",
+            },
+
+            notifications: {
+                type: Boolean,
+                default: true,
+            },
+
+            emailNotifications: {
+                type: Boolean,
+                default: false,
+            },
+        },
     },
     {
         timestamps: true,

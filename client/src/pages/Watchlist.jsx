@@ -14,31 +14,30 @@ function Watchlist() {
     const [loading, setLoading] = useState(true);
 
     const loadWatchlist = async () => {
+    try {
+       const response = await api.get("/watchlist/summary");
 
-        try {
-
-            const response = await api.get("/watchlist");
-
-            setStocks(response.data.data);
-
-        } catch (error) {
-
-            console.error("Failed to load watchlist:", error);
-
-        } finally {
-
-            setLoading(false);
-
-        }
-
-    };
+setStocks(response.data.data.stocks);
+    } catch (error) {
+        console.error("Failed to load watchlist:", error);
+    } finally {
+        setLoading(false);
+    }
+};
 
     useEffect(() => {
 
+    loadWatchlist();
+
+    const interval = setInterval(() => {
+
         loadWatchlist();
 
-    }, []);
+    }, 30000);
 
+    return () => clearInterval(interval);
+
+}, []);
     const removeStock = async (id) => {
 
         try {

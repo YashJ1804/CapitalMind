@@ -1,4 +1,11 @@
-function PortfolioSummary({ summary, holdings }) {
+import { formatCurrency } from "../../../utils/currency";
+
+function PortfolioSummary({
+    summary,
+    holdings,
+    currency = "USD",
+    usdToInr = 88
+}) {
 
     return (
 
@@ -34,6 +41,8 @@ function PortfolioSummary({ summary, holdings }) {
 
             <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
 
+                {/* Holdings */}
+
                 <div className="rounded-2xl border border-slate-800 bg-slate-950 p-6">
 
                     <p className="text-sm text-slate-500">
@@ -46,6 +55,8 @@ function PortfolioSummary({ summary, holdings }) {
 
                 </div>
 
+                {/* Total Investment */}
+
                 <div className="rounded-2xl border border-slate-800 bg-slate-950 p-6">
 
                     <p className="text-sm text-slate-500">
@@ -53,10 +64,18 @@ function PortfolioSummary({ summary, holdings }) {
                     </p>
 
                     <h3 className="mt-3 text-3xl font-black text-blue-400">
-                        ${summary.totalInvestment.toFixed(2)}
+
+                        {formatCurrency(
+                            summary?.totalInvestment || 0,
+                            currency,
+                            usdToInr
+                        )}
+
                     </h3>
 
                 </div>
+
+                {/* Current Value */}
 
                 <div className="rounded-2xl border border-slate-800 bg-slate-950 p-6">
 
@@ -65,10 +84,18 @@ function PortfolioSummary({ summary, holdings }) {
                     </p>
 
                     <h3 className="mt-3 text-3xl font-black text-green-400">
-                        ${summary.currentValue.toFixed(2)}
+
+                        {formatCurrency(
+                            summary?.currentValue || 0,
+                            currency,
+                            usdToInr
+                        )}
+
                     </h3>
 
                 </div>
+
+                {/* Return */}
 
                 <div className="rounded-2xl border border-slate-800 bg-slate-950 p-6">
 
@@ -78,12 +105,12 @@ function PortfolioSummary({ summary, holdings }) {
 
                     <h3
                         className={`mt-3 text-3xl font-black ${
-                            summary.totalProfitLoss >= 0
+                            (summary?.totalProfitLoss || 0) >= 0
                                 ? "text-green-400"
                                 : "text-red-400"
                         }`}
                     >
-                        {summary.totalReturnPercentage.toFixed(2)}%
+                        {(summary?.totalReturnPercentage || 0).toFixed(2)}%
                     </h3>
 
                 </div>
@@ -93,7 +120,6 @@ function PortfolioSummary({ summary, holdings }) {
         </div>
 
     );
-
 }
 
 export default PortfolioSummary;

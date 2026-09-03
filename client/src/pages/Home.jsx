@@ -60,92 +60,27 @@ function Home() {
 
     }, []);
 
-    const handleAnalyze = async () => {
+    const handleAnalyze = () => {
 
-        if (!company.trim()) return;
+    if (!company.trim()) {
+        toast.error("Please enter a company name.");
+        return;
+    }
 
-        if (!isAuthenticated) {
+    if (!isAuthenticated) {
 
-            toast(" Please login to analyze stocks.", {
+        toast("Please login to analyze stocks.", {
+            icon: "🔒"
+        });
 
-                icon: "🔒"
+        navigate("/login");
+        return;
+    }
 
-            });
-
-            navigate("/login");
-
-            return;
-
-        }
-
-        setLoading(true);
-        setLoadingStage("🔍 Searching Company...");
-        setResult(null);
-        setError("");
-
-        const timer1 = setTimeout(() => {
-
-            setLoadingStage("🏢 Fetching Company Profile...");
-
-        }, 2500);
-
-        const timer2 = setTimeout(() => {
-
-            setLoadingStage("💰 Loading Financial Data...");
-
-        }, 5000);
-
-        const timer3 = setTimeout(() => {
-
-            setLoadingStage("📰 Reading Latest News...");
-
-        }, 8000);
-
-        const timer4 = setTimeout(() => {
-
-            setLoadingStage("🤖 AI is Making Investment Decision...");
-
-        }, 12000);
-
-        try {
-
-            const response = await api.post("/analyze", {
-
-                company: company.trim()
-
-            });
-
-            setResult(response.data.data);
-
-        }
-
-        catch (err) {
-
-            console.error(err);
-
-            setError(
-
-                err.response?.data?.message ||
-
-                "Failed to analyze company."
-
-            );
-
-        }
-
-        finally {
-
-            clearTimeout(timer1);
-            clearTimeout(timer2);
-            clearTimeout(timer3);
-            clearTimeout(timer4);
-
-            setLoading(false);
-            setLoadingStage("");
-
-        }
-
-    };
+    navigate(
+        `/analyze?company=${encodeURIComponent(company.trim())}`
+    );
+};
 
     return (
 

@@ -61,7 +61,11 @@ function Dashboard() {
     <AppLayout>
       <div className="space-y-8">
 
-        <WelcomeBanner />
+        <WelcomeBanner
+    onAnalyze={() => {
+        window.location.href = "/analyze";
+    }}
+/>
 
         <DashboardStats
           stats={{

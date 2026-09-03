@@ -1,11 +1,18 @@
 import StatsCard from "../../StatsCard/StatsCard";
+import { formatCurrency } from "../../../utils/currency";
 
-function PortfolioStats({ summary, holdings }) {
+function PortfolioStats({
+    summary,
+    holdings,
+    currency = "USD",
+    usdToInr = 88
+}) {
 
     const totalInvestment = summary?.totalInvestment || 0;
     const currentValue = summary?.currentValue || 0;
     const totalProfitLoss = summary?.totalProfitLoss || 0;
-    const totalReturnPercentage = summary?.totalReturnPercentage || 0;
+    const totalReturnPercentage =
+        summary?.totalReturnPercentage || 0;
 
     return (
 
@@ -13,21 +20,33 @@ function PortfolioStats({ summary, holdings }) {
 
             <StatsCard
                 title="💰 Current Value"
-                value={`$${currentValue.toFixed(2)}`}
+                value={formatCurrency(
+                    currentValue,
+                    currency,
+                    usdToInr
+                )}
                 color="text-green-400"
                 subtitle="Live Portfolio Value"
             />
 
             <StatsCard
                 title="💵 Total Investment"
-                value={`$${totalInvestment.toFixed(2)}`}
+                value={formatCurrency(
+                    totalInvestment,
+                    currency,
+                    usdToInr
+                )}
                 color="text-blue-400"
                 subtitle="Capital Invested"
             />
 
             <StatsCard
                 title="📈 Profit / Loss"
-                value={`$${totalProfitLoss.toFixed(2)}`}
+                value={formatCurrency(
+                    totalProfitLoss,
+                    currency,
+                    usdToInr
+                )}
                 color={
                     totalProfitLoss >= 0
                         ? "text-green-400"
@@ -46,7 +65,6 @@ function PortfolioStats({ summary, holdings }) {
         </div>
 
     );
-
 }
 
 export default PortfolioStats;

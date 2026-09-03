@@ -3,12 +3,14 @@ const express = require("express");
 const router = express.Router();
 
 const authController = require("../controllers/authController");
+
 const authMiddleware = require("../middlewares/authMiddleware");
 
 const {
     registerValidator,
     loginValidator,
-    changePasswordValidator
+    changePasswordValidator,
+    settingsValidator
 } = require("../validators/authValidator");
 
 const validationHandler = require("../validators/validationHandler");
@@ -33,6 +35,14 @@ router.post(
     changePasswordValidator,
     validationHandler,
     authController.changePassword
+);
+
+router.put(
+    "/settings",
+    authMiddleware,
+    settingsValidator,
+    validationHandler,
+    authController.updateSettings
 );
 
 module.exports = router;

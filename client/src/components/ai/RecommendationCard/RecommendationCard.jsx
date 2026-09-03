@@ -9,9 +9,9 @@ function RecommendationCard({ result, profile }) {
         try {
 
             await api.post("/watchlist", {
-                symbol: profile.ticker,
-                company: profile.name
-            });
+    symbol: profile.ticker,
+    companyName: profile.name
+});
 
             toast.success("Added to Watchlist");
 

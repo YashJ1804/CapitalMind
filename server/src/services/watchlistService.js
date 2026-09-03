@@ -1,4 +1,6 @@
 const watchlistRepository = require("../repositories/watchlistRepository");
+const notificationService = require("./notificationService");
+
 const ApiError = require("../utils/apiError");
 const HTTP_STATUS = require("../constants/httpStatus");
 const { getQuote } = require("../tools/financialTool");
@@ -19,7 +21,9 @@ class WatchlistService {
 
         const watchlist = await this.getWatchlist(userId);
 
-        const normalizedSymbol = stockData.symbol.trim().toUpperCase();
+        const normalizedSymbol = stockData.symbol
+            .trim()
+            .toUpperCase();
 
         const existingStock = watchlist.stocks.find(
             (stock) => stock.symbol === normalizedSymbol
@@ -38,18 +42,31 @@ class WatchlistService {
             symbol: normalizedSymbol
         });
 
-        return watchlistRepository.save(watchlist);
+        const savedWatchlist =
+            await watchlistRepository.save(watchlist);
+
+        // Create notification only after the stock
+        // has been successfully added.
+        await notificationService.createNotification({
+            userId,
+            type: "WATCHLIST_ADDED",
+            title: "Stock Added",
+            message: `${stockData.companyName || normalizedSymbol} has been added to your watchlist.`,
+            symbol: normalizedSymbol
+        });
+
+        return savedWatchlist;
     }
 
     async removeStock(userId, stockId) {
 
         const watchlist = await this.getWatchlist(userId);
 
-        const stockExists = watchlist.stocks.some(
+        const stock = watchlist.stocks.find(
             (stock) => stock._id.toString() === stockId
         );
 
-        if (!stockExists) {
+        if (!stock) {
             throw new ApiError(
                 HTTP_STATUS.NOT_FOUND,
                 "Stock not found",
@@ -57,44 +74,61 @@ class WatchlistService {
             );
         }
 
-        return watchlistRepository.deleteStock(
-            watchlist,
-            stockId
-        );
+        const companyName = stock.companyName;
+        const symbol = stock.symbol;
+
+        const updatedWatchlist =
+            await watchlistRepository.deleteStock(
+                watchlist,
+                stockId
+            );
+
+        // Create notification only after the stock
+        // has been successfully removed.
+        await notificationService.createNotification({
+            userId,
+            type: "WATCHLIST_REMOVED",
+            title: "Stock Removed",
+            message: `${companyName || symbol} has been removed from your watchlist.`,
+            symbol
+        });
+
+        return updatedWatchlist;
     }
+
     async getWatchlistSummary(userId) {
 
-    const watchlist = await watchlistRepository.findByUserLean(userId);
+        const watchlist =
+            await watchlistRepository.findByUserLean(userId);
 
-    if (!watchlist) {
-        return {
-            stocks: []
-        };
-    }
-
-    const stocks = await Promise.all(
-
-        watchlist.stocks.map(async (stock) => {
-
-            const quote = await getQuote(stock.symbol);
-
+        if (!watchlist) {
             return {
-
-                ...stock,
-
-                currentPrice: quote.currentPrice,
-                change: quote.change,
-                percentChange: quote.percentChange
-
+                stocks: []
             };
+        }
 
-        })
+        const stocks = await Promise.all(
 
-    );
+            watchlist.stocks.map(async (stock) => {
 
-    return { stocks };
-}
+                const quote = await getQuote(stock.symbol);
 
+                return {
+
+                    ...stock,
+
+                    currentPrice: quote.currentPrice,
+                    change: quote.change,
+                    percentChange: quote.percentChange
+
+                };
+
+            })
+
+        );
+
+        return { stocks };
+    }
 }
 
 module.exports = new WatchlistService();

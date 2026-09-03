@@ -6,9 +6,11 @@ const HTTP_STATUS = require("../constants/httpStatus");
 
 const getEnrichedPortfolio = async (userId) => {
 
-    const holdings = await Portfolio.find({ user: userId });
+    const portfolio = await Portfolio.findOne({
+        user: userId
+    });
 
-    if (!holdings.length) {
+    if (!portfolio || portfolio.holdings.length === 0) {
         throw new ApiError(
             HTTP_STATUS.NOT_FOUND,
             "Portfolio is empty.",
@@ -18,14 +20,11 @@ const getEnrichedPortfolio = async (userId) => {
 
     return Promise.all(
 
-        holdings.map(async (holding) => {
+        portfolio.holdings.map(async (holding) => {
 
             const [quote, profile] = await Promise.all([
-
                 getQuote(holding.symbol),
-
                 getCompanyProfile(holding.symbol)
-
             ]);
 
             const investedValue =
@@ -35,35 +34,25 @@ const getEnrichedPortfolio = async (userId) => {
                 quote.currentPrice * holding.quantity;
 
             return {
-
                 symbol: holding.symbol,
-
+                companyName: holding.companyName,
                 quantity: holding.quantity,
-
                 averagePrice: holding.averagePrice,
-
                 currentPrice: quote.currentPrice,
-
                 investedValue,
-
                 currentValue,
-
                 profit: currentValue - investedValue,
-
                 profitPercentage:
                     investedValue === 0
                         ? 0
-                        : ((currentValue - investedValue) /
-                            investedValue) * 100,
-
+                        : (
+                            (currentValue - investedValue) /
+                            investedValue
+                        ) * 100,
                 profile
-
             };
-
         })
-
     );
-
 };
 
 module.exports = {
